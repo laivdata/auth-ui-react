@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && node -e \"require('fs').cpSync('src/styles/auth-ui.css', 'dist/auth-ui.css')\"",
+    "prepare": "yarn build",
     "test": "vitest run",
     "sample:dev": "cd example && yarn dev",
     "sample:dev:https": "cd example && yarn dev:https",
