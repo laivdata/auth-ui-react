@@ -3,8 +3,6 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yarn install --frozen-lockfile
-        - yarn build
         - cd example
         - yarn install --frozen-lockfile
     build:
@@ -16,7 +14,6 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
       - example/node_modules/**/*
   redirects:
     - source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|jpeg|js|png|txt|svg|woff|woff2|ttf|map|json|webp|eot)$)([^.]+$)/>'
