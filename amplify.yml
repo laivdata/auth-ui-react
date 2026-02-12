@@ -5,10 +5,11 @@ frontend:
       commands:
         - yarn install --frozen-lockfile
         - yarn build
-        - cd example && yarn install --frozen-lockfile
+        - cd example
+        - yarn install --frozen-lockfile
     build:
       commands:
-        - cd example && yarn build
+        - yarn build
   artifacts:
     baseDirectory: example/dist
     files:
