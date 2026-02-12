@@ -381,7 +381,7 @@ function VerifyEmail() {
           );
           window.location.href = '/login';
         }}
-        onFailure={(msg) => {
+        onFailure={(msg: string) => {
           console.log('[auth-ui-react sample]', 'failure', msg);
         }}
       />
@@ -414,7 +414,7 @@ function Callback() {
       <CallbackPage
         config={config}
         search={location.search}
-        onSuccess={(redirectUri) => {
+        onSuccess={(redirectUri?: string) => {
           if (!redirectUri) window.location.href = '/';
         }}
       />
@@ -503,7 +503,7 @@ function ResetPassword() {
           '비밀번호가 변경되었습니다.',
         );
       }}
-      onFailure={(msg) => {
+      onFailure={(msg: string) => {
         console.log('[auth-ui-react sample]', 'failure', msg);
       }}
     />

@@ -3,12 +3,12 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yarn install --frozen-lockfile && yarn build
-        - cd example
         - yarn install --frozen-lockfile
+        - yarn build
+        - cd example && yarn install --frozen-lockfile
     build:
       commands:
-        - yarn build
+        - cd example && yarn build
   artifacts:
     baseDirectory: example/dist
     files:
