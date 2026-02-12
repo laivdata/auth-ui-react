@@ -1,0 +1,561 @@
+/* @laivdata/auth-ui-react: 인증 서버 FE와 동일한 Figma 디자인 기반 스타일 */
+/* Pretendard: @fontsource 패키지 사용 (name table 정렬 이슈 없음, orioncactus CDN 대체) */
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/pretendard@5.2.5/400.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/pretendard@5.2.5/500.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/pretendard@5.2.5/600.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/pretendard@5.2.5/700.css');
+
+/* CSS 변수 정의 - Figma 디자인 기반 */
+:root {
+  --auth-primary: #225695; /* Figma: 기본 버튼 배경색 */
+  --auth-primary-hover: #5198DD; /* Figma: hover 상태 배경색 */
+  --auth-primary-pressed: #1A406F; /* Figma: pressed 상태 배경색 */
+  --auth-primary-foreground: #ffffff; /* Figma: 버튼 텍스트 색상 */
+  --auth-primary-disabled-bg: #E0E0E0; /* Figma: disabled 배경색 */
+  --auth-primary-disabled-text: #888888; /* Figma: disabled 텍스트 색상 */
+  --auth-foreground: #000000; /* Figma: 주요 텍스트 색상 (검은색) */
+  --auth-muted-foreground: #737373; /* Figma: 보조 텍스트 색상 (회색) */
+  --auth-border: #e5e5e5;
+  --auth-popover: white;
+  --auth-bg-white: #ffffff; /* Figma 디자인: UI 영역 기본 배경색 */
+  --auth-divider: #d9d9d9; /* Figma: 구분선 색상 */
+  --auth-rounded-lg: 8px;
+  --auth-rounded-xl: 16px;
+
+  /* 버튼 공통 스타일 - Figma 디자인 */
+  --auth-btn-height: 48px;
+  --auth-btn-font-size: 16px;
+  --auth-btn-line-height: 24px;
+  --auth-btn-padding: 16px 24px;
+
+  /* 입력 필드 공통 스타일 - Figma 디자인 */
+  --auth-input-height: 40px;
+
+  /* 포커스 아웃라인 색상 - 공통 */
+  --auth-focus-outline: #b8d9f2;
+
+  /* 소셜 로그인 색상 */
+  --naver-bg: #03a94d;
+  --naver-text: white;
+  --kakao-bg: #fee500;
+  --kakao-text: #000000;
+  --google-bg: #f2f2f2;
+  --google-text: #1f1f1f;
+  --apple-bg: #000000;
+  --apple-text: white;
+}
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #f8f9fa;
+}
+
+.auth-ui-white {
+  background: var(--auth-bg-white) !important;
+}
+
+.auth-card {
+  background: var(--auth-bg-white) !important;
+  border-radius: var(--auth-rounded-xl);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  width: 100%;
+  max-width: 380px;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-header h2 {
+  color: var(--auth-muted-foreground);
+  margin: 0 0 4px 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.auth-header h2 i {
+  display: none;
+}
+
+.auth-header p {
+  color: var(--auth-foreground);
+  margin: 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.auth-form {
+  margin-bottom: 24px;
+}
+
+.auth-form .form-group {
+  margin-bottom: 16px;
+}
+
+.auth-form .form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.auth-form .btn-primary,
+.auth-form .btn.btn-primary {
+  margin-top: 24px;
+}
+
+.auth-form .form-group label,
+.auth-card .form-group label,
+.auth-card form .form-group label {
+  display: block;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--auth-foreground) !important;
+  margin-bottom: 4px;
+}
+
+.auth-input {
+  padding: 10px 12px;
+  height: var(--auth-input-height);
+  background: var(--auth-popover);
+  border: 1px solid var(--auth-border);
+  border-radius: var(--auth-rounded-lg);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--auth-foreground);
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--auth-primary);
+  box-shadow: 0 0 0 3px var(--auth-focus-outline);
+}
+
+.auth-input::placeholder {
+  color: var(--auth-muted-foreground);
+}
+
+.auth-form .form-group input[type="text"],
+.auth-form .form-group input[type="email"],
+.auth-form .form-group input[type="password"],
+.auth-form .form-group input[type="tel"],
+.auth-form .form-group input[type="number"],
+.auth-form .form-group input:not([type]),
+.auth-form .form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  height: var(--auth-input-height);
+  background: var(--auth-popover);
+  border: 1px solid var(--auth-border);
+  border-radius: var(--auth-rounded-lg);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--auth-foreground);
+  box-sizing: border-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.auth-form .form-group input:focus {
+  outline: none;
+  border-color: var(--auth-primary);
+  box-shadow: 0 0 0 3px var(--auth-focus-outline);
+}
+
+.auth-form .form-group input::placeholder {
+  color: var(--auth-muted-foreground);
+}
+
+.auth-card .btn,
+.auth-form .btn,
+.auth-card .btn-primary,
+.auth-card .btn.btn-primary,
+.auth-form .btn-primary,
+.auth-form .btn.btn-primary,
+.social-buttons .btn {
+  width: 100%;
+  height: var(--auth-btn-height);
+  padding: var(--auth-btn-padding);
+  border: none !important;
+  border-radius: var(--auth-rounded-lg);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  font-size: var(--auth-btn-font-size);
+  line-height: var(--auth-btn-line-height);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-sizing: border-box;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.auth-card .btn-primary,
+.auth-card .btn.btn-primary,
+.auth-form .btn-primary,
+.auth-form .btn.btn-primary {
+  background-color: var(--auth-primary) !important;
+  color: var(--auth-primary-foreground) !important;
+}
+
+.auth-card .btn:hover:not(:focus):not(:focus-visible):not(:disabled),
+.auth-form .btn:hover:not(:focus):not(:focus-visible):not(:disabled),
+.auth-card .btn-primary:hover:not(:focus):not(:focus-visible):not(:disabled),
+.auth-form .btn-primary:hover:not(:focus):not(:focus-visible):not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.auth-card .btn-primary:hover:not(:focus):not(:focus-visible):not(:disabled),
+.auth-form .btn-primary:hover:not(:focus):not(:focus-visible):not(:disabled) {
+  background-color: var(--auth-primary-hover) !important;
+}
+
+.auth-card .btn:focus,
+.auth-form .btn:focus,
+.auth-card .btn:focus-visible,
+.auth-form .btn:focus-visible,
+.auth-card .btn-primary:focus,
+.auth-form .btn-primary:focus,
+.auth-card .btn-primary:focus-visible,
+.auth-form .btn-primary:focus-visible,
+.social-buttons .btn:focus,
+.social-buttons .btn:focus-visible,
+.social-buttons .btn-naver:focus,
+.social-buttons .btn-naver:focus-visible,
+.social-buttons .btn-kakao:focus,
+.social-buttons .btn-kakao:focus-visible,
+.social-buttons .btn-google:focus,
+.social-buttons .btn-google:focus-visible,
+.social-buttons .btn-apple:focus,
+.social-buttons .btn-apple:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.auth-card .btn-primary:focus:hover,
+.auth-form .btn-primary:focus:hover,
+.auth-card .btn-primary:focus-visible:hover,
+.auth-form .btn-primary:focus-visible:hover {
+  background-color: var(--auth-primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.auth-card .btn-primary:focus,
+.auth-form .btn-primary:focus,
+.auth-card .btn-primary:focus-visible,
+.auth-form .btn-primary:focus-visible {
+  background-color: var(--auth-primary) !important;
+}
+
+.auth-card .btn:active:not(:disabled),
+.auth-form .btn:active:not(:disabled),
+.auth-card .btn-primary:active:not(:disabled),
+.auth-form .btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.auth-card .btn-primary:active:not(:disabled),
+.auth-form .btn-primary:active:not(:disabled) {
+  background-color: var(--auth-primary-pressed) !important;
+}
+
+.auth-card .btn-primary:disabled,
+.auth-form .btn-primary:disabled,
+.auth-card .btn.btn-primary:disabled,
+.auth-form .btn.btn-primary:disabled {
+  background-color: var(--auth-primary-disabled-bg) !important;
+  color: var(--auth-primary-disabled-text) !important;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-footer a {
+  display: block;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 8px;
+  color: var(--auth-muted-foreground);
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+
+.auth-footer a:last-child {
+  margin-bottom: 0;
+}
+
+.auth-footer a:visited {
+  color: var(--auth-muted-foreground);
+}
+
+.auth-footer a:hover {
+  color: var(--auth-primary);
+  text-decoration: none;
+}
+
+.auth-footer a:active {
+  color: var(--auth-muted-foreground);
+}
+
+.social-login {
+  margin: 0 0 24px 0;
+}
+
+.social-login p {
+  display: flex;
+  align-items: center;
+  margin: 0 0 24px 0;
+  padding: 0;
+}
+
+.social-login p span {
+  color: var(--auth-foreground);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.social-login p::before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--auth-divider);
+  margin-right: 8px;
+}
+
+.social-login p::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--auth-divider);
+  margin-left: 8px;
+}
+
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.social-buttons .btn {
+  gap: 8px;
+}
+
+.social-buttons .btn-naver,
+.social-buttons .btn-outline-success {
+  background-color: var(--naver-bg) !important;
+  color: var(--naver-text) !important;
+  border: none !important;
+}
+
+.social-buttons .btn-naver:hover:not(:focus):not(:focus-visible),
+.social-buttons .btn-outline-success:hover:not(:focus):not(:focus-visible) {
+  background-color: #029943 !important;
+  color: var(--naver-text) !important;
+}
+
+.social-buttons .btn-naver:focus:hover,
+.social-buttons .btn-naver:focus-visible:hover {
+  background-color: #029943 !important;
+  color: var(--naver-text) !important;
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.social-buttons .btn-kakao,
+.social-buttons .btn-outline-warning {
+  background-color: var(--kakao-bg) !important;
+  color: var(--kakao-text) !important;
+  border: none !important;
+}
+
+.social-buttons .btn-kakao:hover:not(:focus):not(:focus-visible),
+.social-buttons .btn-outline-warning:hover:not(:focus):not(:focus-visible) {
+  background-color: #e6cf00 !important;
+  color: var(--kakao-text) !important;
+}
+
+.social-buttons .btn-kakao:focus:hover,
+.social-buttons .btn-kakao:focus-visible:hover {
+  background-color: #e6cf00 !important;
+  color: var(--kakao-text) !important;
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.social-buttons .btn-google,
+.social-buttons .btn-outline-primary {
+  background-color: var(--google-bg) !important;
+  color: var(--google-text) !important;
+  border: none !important;
+}
+
+.social-buttons .btn-google:hover:not(:focus):not(:focus-visible),
+.social-buttons .btn-outline-primary:hover:not(:focus):not(:focus-visible) {
+  background-color: #e5e5e5 !important;
+  color: var(--google-text) !important;
+}
+
+.social-buttons .btn-google:focus:hover,
+.social-buttons .btn-google:focus-visible:hover {
+  background-color: #e5e5e5 !important;
+  color: var(--google-text) !important;
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.social-buttons .btn-apple {
+  background-color: var(--apple-bg) !important;
+  color: var(--apple-text) !important;
+  border: none !important;
+}
+
+.social-buttons .btn-apple:hover:not(:focus):not(:focus-visible) {
+  background-color: #1a1a1a !important;
+  color: var(--apple-text) !important;
+}
+
+.social-buttons .btn-apple:focus:hover,
+.social-buttons .btn-apple:focus-visible:hover {
+  background-color: #1a1a1a !important;
+  color: var(--apple-text) !important;
+  box-shadow: 0 0 0 3px var(--auth-focus-outline) !important;
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: var(--auth-rounded-lg);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+}
+
+.alert-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  border-radius: var(--auth-rounded-lg);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+}
+
+.btn .spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .auth-card {
+    padding: 24px;
+    margin: 16px;
+    border-radius: 12px;
+  }
+
+  .auth-header {
+    margin-bottom: 24px;
+  }
+
+  .social-buttons .btn,
+  .auth-card .btn-primary,
+  .auth-form .btn-primary {
+    height: var(--auth-btn-height);
+    font-size: var(--auth-btn-font-size);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .auth-container {
+    background: #1a1a1a;
+  }
+
+  .auth-card {
+    background-color: var(--auth-bg-white) !important;
+    color: var(--auth-foreground);
+  }
+
+  .auth-header h2,
+  .auth-header p {
+    color: var(--auth-foreground);
+  }
+
+  .auth-form .form-group label {
+    color: var(--auth-foreground);
+  }
+
+  .auth-form .form-group input {
+    background-color: white !important;
+    border-color: var(--auth-border);
+    color: var(--auth-foreground);
+  }
+
+  .auth-form .form-group input:focus {
+    border-color: #5b7cb5;
+    box-shadow: 0 0 0 3px rgba(91, 124, 181, 0.3);
+  }
+
+  .auth-card .btn-primary,
+  .auth-form .btn-primary {
+    background-color: var(--auth-primary) !important;
+    color: var(--auth-primary-foreground) !important;
+  }
+
+  .auth-card .btn-primary:hover:not(:disabled),
+  .auth-form .btn-primary:hover:not(:disabled) {
+    background-color: var(--auth-primary-hover) !important;
+  }
+
+  .auth-footer a {
+    color: #a3a3a3;
+  }
+
+  .auth-footer a:hover {
+    color: #5b7cb5;
+  }
+
+  .social-login p span {
+    color: var(--auth-foreground);
+  }
+}
