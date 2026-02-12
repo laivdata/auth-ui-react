@@ -138,7 +138,7 @@ const config: AuthClientConfig = {
 
 ## 예제
 
-- **동작 데모**: [https://auth-sample.laivdata.com/](https://auth-sample.laivdata.com/) — 배포된 예제 앱 (동작만 확인할 때 사용).
+- **동작 데모**: [https://auth-ui-sample.laivdata.com/](https://auth-ui-sample.laivdata.com/) — 배포된 예제 앱 (동작만 확인할 때 사용).
 - **예제 소스**: 이 패키지의 예제 앱은 **npm에 포함되지 않고**, 이 저장소의 `packages/auth-ui-react/example` 에만 있습니다.  
   로컬에서 실행·수정해 보려면 **저장소를 clone** 한 뒤 아래처럼 실행하면 됩니다.
 
