@@ -9,7 +9,12 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && node -e \"require('fs').cpSync('src/styles/auth-ui.css', 'dist/auth-ui.css')\"",
-    "test": "vitest run"
+    "test": "vitest run",
+    "sample:dev": "cd example && yarn dev",
+    "sample:dev:https": "cd example && yarn dev:https",
+    "sample:build": "yarn build && cd example && yarn install --frozen-lockfile && yarn build",
+    "sample:build-packages": "yarn build",
+    "pack:auth-ui-react": "yarn build && npm pack"
   },
   "exports": {
     ".": {
