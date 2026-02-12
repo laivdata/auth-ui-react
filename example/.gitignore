@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vite는 vite.config.ts만 사용. tsc 부산물은 dist-node/로 격리
+dist-node/
+vite.config.js
+dist/

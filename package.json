@@ -1,0 +1,43 @@
+{
+  "name": "@laivdata/auth-ui-react",
+  "version": "0.2.0",
+  "description": "React UI and client utilities for login, register, workspace join, email verification",
+  "private": false,
+  "repository": { "type": "git", "url": "https://github.com/laivdata/auth-ui-react.git" },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').cpSync('src/styles/auth-ui.css', 'dist/auth-ui.css')\"",
+    "test": "vitest run"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./styles.css": "./dist/auth-ui.css"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "style": "./dist/auth-ui.css",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "@types/react": "^18.3.0",
+    "jsdom": "^25.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

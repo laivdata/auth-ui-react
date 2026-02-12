@@ -1,0 +1,12 @@
+[
+  {
+    "source": "/assets/<*>",
+    "target": "/assets/<*>",
+    "status": "200"
+  },
+  {
+    "source": "</^[^.]+$|\\.(?!(css|js|png|jpg|jpeg|svg|woff2?|ttf|map|json|ico)$)([^.]+$)/>",
+    "target": "/index.html",
+    "status": "200"
+  }
+]
