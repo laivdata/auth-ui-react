@@ -22,6 +22,9 @@
   --auth-rounded-lg: 8px;
   --auth-rounded-xl: 16px;
 
+  /* 카드 여백 - Figma 디자인 */
+  --auth-card-padding: 40px;
+
   /* 버튼 공통 스타일 - Figma 디자인 */
   --auth-btn-height: 48px;
   --auth-btn-font-size: 16px;
@@ -62,7 +65,7 @@
   background: var(--auth-bg-white) !important;
   border-radius: var(--auth-rounded-xl);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  padding: 40px;
+  padding: var(--auth-card-padding);
   width: 100%;
   max-width: 380px;
   animation: slideUp 0.4s ease-out;
@@ -489,7 +492,7 @@
 
 @media (max-width: 576px) {
   .auth-card {
-    padding: 24px;
+    padding: 24px; /* 모바일에서만 24px 고정 (변수 오버라이드 가능) */
     margin: 16px;
     border-radius: 12px;
   }

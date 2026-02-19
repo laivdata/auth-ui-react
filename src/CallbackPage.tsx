@@ -4,8 +4,9 @@ import {
   getCallbackRedirectUri,
   type AuthClientConfig,
 } from './client';
+import type { AuthFormLayoutProps } from './form-layout-props';
 
-export interface CallbackPageProps {
+export interface CallbackPageProps extends Pick<AuthFormLayoutProps, 'className' | 'style'> {
   config: AuthClientConfig;
   /** URL 쿼리 (예: location.search). 없으면 window.location.search 사용 */
   search?: string;
@@ -30,6 +31,8 @@ export function CallbackPage({
   workspaceJoinPath = '/workspace-join',
   onSuccess,
   onFailure,
+  className,
+  style,
 }: CallbackPageProps) {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState<string | null>(null);
@@ -135,10 +138,22 @@ export function CallbackPage({
     })();
   }, [config.authServerBaseUrl, config.appBaseUrl, config.callbackPath, defaultPath, workspaceJoinPath, onSuccess, onFailure, search]);
 
-  if (status === 'loading') return <div data-testid="callback-loading">로그인 처리 중...</div>;
-  if (status === 'success') return <div data-testid="callback-success">로그인되었습니다.</div>;
+  if (status === 'loading') {
+    return (
+      <div className={className} style={style} data-testid="callback-loading">
+        로그인 처리 중...
+      </div>
+    );
+  }
+  if (status === 'success') {
+    return (
+      <div className={className} style={style} data-testid="callback-success">
+        로그인되었습니다.
+      </div>
+    );
+  }
   return (
-    <div data-testid="callback-error">
+    <div className={className} style={style} data-testid="callback-error">
       <p role="alert">{message}</p>
     </div>
   );

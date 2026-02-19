@@ -8,8 +8,8 @@ const authUiReactSrc = resolve(__dirname, '../src/index.ts');
 // 스타일은 소스 CSS 직접 참조 (빌드 없이 예제 실행 가능)
 const authUiReactStyles = resolve(__dirname, '../src/styles/auth-ui.css');
 
-// SSL: 인증 서버와 동일한 ssl/ 디렉터리 사용 (로컬 laivdata 도메인, 루트 기준)
-const sslDir = resolve(__dirname, '../../../ssl');
+// SSL: 프로젝트 루트 ssl/ 사용 (agent-auth에서 복사한 laivdata-*.pem, sample-local.laivdata.com 등)
+const sslDir = resolve(__dirname, '../ssl');
 const keyPath = resolve(sslDir, 'laivdata-key.pem');
 const certPath = resolve(sslDir, 'laivdata-cert.pem');
 const httpsEnabled =

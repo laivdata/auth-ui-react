@@ -10,7 +10,7 @@ const client_1 = require("./client");
  * - code 있음: POST /api/auth/token으로 토큰 교환 → user.wsid에 따라 defaultPath 또는 workspaceJoinPath로 이동.
  * - code 없음: 에러 표시 (로그인 페이지에서 다시 시도 유도).
  */
-function CallbackPage({ config, search, defaultPath = '/', workspaceJoinPath = '/workspace-join', onSuccess, onFailure, }) {
+function CallbackPage({ config, search, defaultPath = '/', workspaceJoinPath = '/workspace-join', onSuccess, onFailure, className, style, }) {
     const [status, setStatus] = (0, react_1.useState)('loading');
     const [message, setMessage] = (0, react_1.useState)(null);
     const redirectDoneRef = (0, react_1.useRef)(false);
@@ -109,9 +109,11 @@ function CallbackPage({ config, search, defaultPath = '/', workspaceJoinPath = '
             }
         })();
     }, [config.authServerBaseUrl, config.appBaseUrl, config.callbackPath, defaultPath, workspaceJoinPath, onSuccess, onFailure, search]);
-    if (status === 'loading')
-        return (0, jsx_runtime_1.jsx)("div", { "data-testid": "callback-loading", children: "\uB85C\uADF8\uC778 \uCC98\uB9AC \uC911..." });
-    if (status === 'success')
-        return (0, jsx_runtime_1.jsx)("div", { "data-testid": "callback-success", children: "\uB85C\uADF8\uC778\uB418\uC5C8\uC2B5\uB2C8\uB2E4." });
-    return ((0, jsx_runtime_1.jsx)("div", { "data-testid": "callback-error", children: (0, jsx_runtime_1.jsx)("p", { role: "alert", children: message }) }));
+    if (status === 'loading') {
+        return ((0, jsx_runtime_1.jsx)("div", { className: className, style: style, "data-testid": "callback-loading", children: "\uB85C\uADF8\uC778 \uCC98\uB9AC \uC911..." }));
+    }
+    if (status === 'success') {
+        return ((0, jsx_runtime_1.jsx)("div", { className: className, style: style, "data-testid": "callback-success", children: "\uB85C\uADF8\uC778\uB418\uC5C8\uC2B5\uB2C8\uB2E4." }));
+    }
+    return ((0, jsx_runtime_1.jsx)("div", { className: className, style: style, "data-testid": "callback-error", children: (0, jsx_runtime_1.jsx)("p", { role: "alert", children: message }) }));
 }

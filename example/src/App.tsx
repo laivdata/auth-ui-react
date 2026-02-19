@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { Routes, Route, Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import '@laivdata/auth-ui-react/styles.css';
 import {
   getCallbackRedirectUri,
@@ -118,16 +118,16 @@ function NavItem({
   );
 }
 
-function Layout({ children }: { children: React.ReactNode }) {
+/** basePath: '/default' | '/custom' — 네비 링크와 리다이렉트 기준 */
+function Layout({ basePath }: { basePath: string }) {
   const path = useLocation().pathname;
   const isCallback = path === '/auth/callback';
-  const isVerifyEmail = path === '/verify-email';
+  const isVerifyEmail = path === '/verify-email' || path === '/default/verify-email' || path === '/custom/verify-email';
   const isResetPassword = path === '/reset-password';
   const hideNav = isCallback || isVerifyEmail || isResetPassword;
   const { authenticated, hasLocalAccount, refetch } = useAuthMe();
   const [logoutLoading, setLogoutLoading] = useState(false);
 
-  // 경로가 바뀔 때마다 로그인 상태 재확인 (콜백 리다이렉트 후 등)
   useEffect(() => {
     if (!hideNav) refetch();
   }, [path, hideNav, refetch]);
@@ -142,7 +142,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       });
       if (res.ok) {
         await refetch();
-        window.location.href = '/';
+        window.location.href = basePath;
       }
     } finally {
       setLogoutLoading(false);
@@ -153,50 +153,23 @@ function Layout({ children }: { children: React.ReactNode }) {
     <div className="sample">
       {!hideNav && (
         <header className="sample-header">
-          <h1>auth-ui-react 샘플</h1>
+          <h1>auth-ui-react 샘플 · {basePath === '/custom' ? 'Custom UI' : 'Default'}</h1>
           <p className="sample-auth-url">
             인증 서버: {config.authServerBaseUrl}
           </p>
           <nav className="sample-nav" aria-label="메인">
-            <NavItem
-              to="/"
-              label="홈"
-              current={path === '/'}
-              disabled={false}
-            />
+            <NavItem to={basePath} label="홈" current={path === basePath} disabled={false} />
             {!authenticated && (
               <>
-                <NavItem
-                  to="/login"
-                  label="로그인"
-                  current={path === '/login'}
-                  disabled={false}
-                />
-                <NavItem
-                  to="/register"
-                  label="회원가입"
-                  current={path === '/register'}
-                  disabled={false}
-                />
-                <NavItem
-                  to="/resend-verification"
-                  label="인증 메일 재전송"
-                  current={path === '/resend-verification'}
-                  disabled={false}
-                />
+                <NavItem to={`${basePath}/login`} label="로그인" current={path === `${basePath}/login`} disabled={false} />
+                <NavItem to={`${basePath}/register`} label="회원가입" current={path === `${basePath}/register`} disabled={false} />
+                <NavItem to={`${basePath}/resend-verification`} label="인증 메일 재전송" current={path === `${basePath}/resend-verification`} disabled={false} />
               </>
             )}
             {authenticated && (
               <>
                 {hasLocalAccount && (
-                  <>
-                    <NavItem
-                      to="/reset-password-request"
-                      label="비밀번호 재설정 요청"
-                      current={path === '/reset-password-request'}
-                      disabled={false}
-                    />
-                  </>
+                  <NavItem to={`${basePath}/reset-password-request`} label="비밀번호 재설정 요청" current={path === `${basePath}/reset-password-request`} disabled={false} />
                 )}
                 <button
                   type="button"
@@ -212,7 +185,44 @@ function Layout({ children }: { children: React.ReactNode }) {
           </nav>
         </header>
       )}
-      <main className="sample-main">{children}</main>
+      <main className="sample-main">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
+
+/** 최상단: Default / Custom 중 선택 */
+function ChoicePage() {
+  const navigate = useNavigate();
+  return (
+    <div className="sample-choice">
+      <h1 className="sample-choice-title">auth-ui-react 예제</h1>
+      <p className="sample-choice-desc">아래에서 사용할 UI 방식을 선택하세요.</p>
+      <div className="sample-choice-buttons">
+        <button
+          type="button"
+          className="sample-choice-btn"
+          onClick={() => navigate('/default')}
+          data-testid="choice-default"
+        >
+          <span className="sample-choice-btn-label">Default</span>
+          <span className="sample-choice-btn-desc">
+            기본 스타일 폼을 그대로 사용합니다. CSS 변수(:root의 --auth-*)만 오버라이드해 색·간격을 바꿀 수 있습니다.
+          </span>
+        </button>
+        <button
+          type="button"
+          className="sample-choice-btn"
+          onClick={() => navigate('/custom')}
+          data-testid="choice-custom"
+        >
+          <span className="sample-choice-btn-label">Custom</span>
+          <span className="sample-choice-btn-desc">
+            나중에 주입용 컴포넌트(훅·래퍼)를 사용하는 경로입니다. 현재는 Default와 동일한 폼을 표시합니다.
+          </span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -220,64 +230,26 @@ function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <Home />
-          </Layout>
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          <Layout>
-            <Login />
-          </Layout>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <Layout>
-            <Register />
-          </Layout>
-        }
-      />
-      <Route
-        path="/verify-email"
-        element={
-          <Layout>
-            <VerifyEmail />
-          </Layout>
-        }
-      />
-      <Route
-        path="/resend-verification"
-        element={
-          <Layout>
-            <ResendVerification />
-          </Layout>
-        }
-      />
+      <Route path="/" element={<ChoicePage />} />
+      <Route path="/default" element={<Layout basePath="/default" />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="resend-verification" element={<ResendVerification />} />
+        <Route path="workspace-join" element={<WorkspaceJoin />} />
+        <Route path="reset-password-request" element={<RequestPasswordReset />} />
+      </Route>
+      <Route path="/custom" element={<Layout basePath="/custom" />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="resend-verification" element={<ResendVerification />} />
+        <Route path="workspace-join" element={<WorkspaceJoin />} />
+        <Route path="reset-password-request" element={<RequestPasswordReset />} />
+      </Route>
       <Route path="/auth/callback" element={<Callback />} />
-      <Route
-        path="/workspace-join"
-        element={
-          <Layout>
-            <WorkspaceJoin />
-          </Layout>
-        }
-      />
-      <Route
-        path="/reset-password-request"
-        element={
-          <Layout>
-            <RequestPasswordReset />
-          </Layout>
-        }
-      />
-      {/* 이메일 링크로 진입하는 페이지: nav 없이 fullpage */}
       <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
@@ -297,7 +269,13 @@ function Home() {
   );
 }
 
+function useBasePath(): string {
+  const path = useLocation().pathname;
+  return path.startsWith('/custom') ? '/custom' : '/default';
+}
+
 function Login() {
+  const basePath = useBasePath();
   const authServerLoginUrl = getAuthServerLoginUrl(config, {
     workspaceId: oauth2WorkspaceId,
     redirectUri: getCallbackRedirectUri(config),
@@ -327,12 +305,12 @@ function Login() {
         workspaceId={oauth2WorkspaceId}
         redirectUri={getCallbackRedirectUri(config)}
         workspaceName="auth-ui-react 샘플"
-        registerHref="/register"
-        resetPasswordHref="/reset-password-request"
+        registerHref={`${basePath}/register`}
+        resetPasswordHref={`${basePath}/reset-password-request`}
         layout="card"
         onSuccess={() => {
           console.log('[auth-ui-react sample]', 'success', '로그인 성공');
-          window.location.href = '/';
+          window.location.href = basePath;
         }}
       />
     </section>
@@ -340,13 +318,14 @@ function Login() {
 }
 
 function Register() {
+  const basePath = useBasePath();
   return (
     <section className="sample-section sample-section--auth">
       <RegisterForm
         config={config}
         workspaceName="auth-ui-react 샘플"
-        loginHref="/login"
-        resendVerificationHref="/resend-verification"
+        loginHref={`${basePath}/login`}
+        resendVerificationHref={`${basePath}/resend-verification`}
         layout="card"
         onSuccess={() => {
           console.log(
@@ -354,7 +333,7 @@ function Register() {
             'success',
             '회원가입 성공. 이메일 인증 링크를 확인하세요.',
           );
-          window.location.href = '/login';
+          window.location.href = `${basePath}/login`;
         }}
       />
     </section>
@@ -363,6 +342,7 @@ function Register() {
 
 function VerifyEmail() {
   const location = useLocation();
+  const basePath = useBasePath();
   return (
     <section className="sample-section">
       <h2>이메일 인증</h2>
@@ -379,7 +359,7 @@ function VerifyEmail() {
             'success',
             '이메일 인증이 완료되었습니다.',
           );
-          window.location.href = '/login';
+          window.location.href = `${basePath}/login`;
         }}
         onFailure={(msg: string) => {
           console.log('[auth-ui-react sample]', 'failure', msg);
@@ -415,7 +395,7 @@ function Callback() {
         config={config}
         search={location.search}
         onSuccess={(redirectUri?: string) => {
-          if (!redirectUri) window.location.href = '/';
+          if (!redirectUri) window.location.href = '/default';
         }}
       />
     </section>
@@ -424,6 +404,7 @@ function Callback() {
 
 function WorkspaceJoin() {
   const location = useLocation();
+  const basePath = useBasePath();
   const fromQuery =
     new URLSearchParams(location.search).get('workspaceId') ?? '';
   const [workspaceId, setWorkspaceId] = useState(fromQuery || 'my-workspace');
@@ -454,7 +435,7 @@ function WorkspaceJoin() {
               'success',
               '워크스페이스에 가입되었습니다.',
             );
-            window.location.href = '/';
+            window.location.href = basePath;
           }}
         />
       ) : (
@@ -465,13 +446,14 @@ function WorkspaceJoin() {
 }
 
 function RequestPasswordReset() {
+  const basePath = useBasePath();
   return (
     <section className="sample-section sample-section--auth">
       <RequestPasswordResetForm
         config={config}
         resetPasswordBaseUrl={`${appOrigin.replace(/\/$/, '')}/reset-password`}
         workspaceName="auth-ui-react 샘플"
-        loginHref="/login"
+        loginHref={`${basePath}/login`}
         layout="card"
         onSuccess={() => {
           console.log(
@@ -485,7 +467,7 @@ function RequestPasswordReset() {
   );
 }
 
-/** 이메일 링크로 진입 (callback처럼 nav 없이 fullpage) */
+/** 이메일 링크로 진입 (nav 없이 fullpage). 성공 시 /default로 이동 */
 function ResetPassword() {
   const location = useLocation();
   return (
@@ -493,8 +475,8 @@ function ResetPassword() {
       config={config}
       search={location.search}
       workspaceName="auth-ui-react 샘플"
-      loginHref="/login"
-      successRedirectPath="/"
+      loginHref="/default/login"
+      successRedirectPath="/default"
       layout="fullpage"
       onSuccess={() => {
         console.log(

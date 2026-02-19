@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ResetPasswordForm = exports.RequestPasswordResetForm = exports.CallbackPage = exports.ResendVerificationForm = exports.VerifyEmailForm = exports.WorkspaceJoinForm = exports.RegisterForm = exports.LoginForm = exports.createLocalStorageStorage = exports.createMemoryStorage = exports.getCallbackRedirectUri = exports.getCallbackParams = exports.getAvailableOAuth2Providers = exports.getOAuth2ProviderRedirectUrl = exports.getAuthServerLoginUrl = exports.getLoginPageUrl = exports.getOAuth2LoginUrl = void 0;
+exports.LoginFormCustom = exports.useLoginForm = exports.mergeClassName = exports.ResetPasswordForm = exports.RequestPasswordResetForm = exports.CallbackPage = exports.ResendVerificationForm = exports.VerifyEmailForm = exports.WorkspaceJoinForm = exports.RegisterForm = exports.LoginForm = exports.createLocalStorageStorage = exports.createMemoryStorage = exports.getCallbackRedirectUri = exports.getCallbackParams = exports.getAvailableOAuth2Providers = exports.getOAuth2ProviderRedirectUrl = exports.getAuthServerLoginUrl = exports.getLoginPageUrl = exports.getOAuth2LoginUrl = void 0;
 var client_1 = require("./client");
 Object.defineProperty(exports, "getOAuth2LoginUrl", { enumerable: true, get: function () { return client_1.getOAuth2LoginUrl; } });
 Object.defineProperty(exports, "getLoginPageUrl", { enumerable: true, get: function () { return client_1.getLoginPageUrl; } });
@@ -27,3 +27,9 @@ var RequestPasswordResetForm_1 = require("./RequestPasswordResetForm");
 Object.defineProperty(exports, "RequestPasswordResetForm", { enumerable: true, get: function () { return RequestPasswordResetForm_1.RequestPasswordResetForm; } });
 var ResetPasswordForm_1 = require("./ResetPasswordForm");
 Object.defineProperty(exports, "ResetPasswordForm", { enumerable: true, get: function () { return ResetPasswordForm_1.ResetPasswordForm; } });
+var form_layout_props_1 = require("./form-layout-props");
+Object.defineProperty(exports, "mergeClassName", { enumerable: true, get: function () { return form_layout_props_1.mergeClassName; } });
+var hooks_1 = require("./hooks");
+Object.defineProperty(exports, "useLoginForm", { enumerable: true, get: function () { return hooks_1.useLoginForm; } });
+var LoginFormCustom_1 = require("./LoginFormCustom");
+Object.defineProperty(exports, "LoginFormCustom", { enumerable: true, get: function () { return LoginFormCustom_1.LoginFormCustom; } });

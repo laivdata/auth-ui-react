@@ -7,7 +7,7 @@ const react_1 = require("react");
  * 이메일 인증 링크 랜딩 페이지용 폼.
  * URL 쿼리에서 email, code(, context, workspaceId)를 읽어 API 검증 후 성공/실패 UI 표시.
  */
-function VerifyEmailForm({ config, search, onSuccess, onFailure, }) {
+function VerifyEmailForm({ config, search, onSuccess, onFailure, className, style, formClassName, formStyle, }) {
     const [status, setStatus] = (0, react_1.useState)('idle');
     const [message, setMessage] = (0, react_1.useState)(null);
     const [codeInput, setCodeInput] = (0, react_1.useState)('');
@@ -55,7 +55,7 @@ function VerifyEmailForm({ config, search, onSuccess, onFailure, }) {
         }
     }, []);
     if (status === 'success') {
-        return ((0, jsx_runtime_1.jsxs)("div", { "data-testid": "verify-email-success", children: [(0, jsx_runtime_1.jsx)("p", { role: "status", children: message }), onSuccess == null && ((0, jsx_runtime_1.jsx)("a", { href: "/login", "data-testid": "verify-email-login-link", children: "\uB85C\uADF8\uC778\uD558\uAE30" }))] }));
+        return ((0, jsx_runtime_1.jsxs)("div", { className: className, style: style, "data-testid": "verify-email-success", children: [(0, jsx_runtime_1.jsx)("p", { role: "status", children: message }), onSuccess == null && ((0, jsx_runtime_1.jsx)("a", { href: "/login", "data-testid": "verify-email-login-link", children: "\uB85C\uADF8\uC778\uD558\uAE30" }))] }));
     }
-    return ((0, jsx_runtime_1.jsxs)("div", { "data-testid": "verify-email-form", children: [emailFromUrl && (0, jsx_runtime_1.jsxs)("p", { children: ["\uC774\uBA54\uC77C: ", emailFromUrl] }), !codeFromUrl && ((0, jsx_runtime_1.jsx)("input", { type: "text", placeholder: "\uC778\uC99D \uCF54\uB4DC 6\uC790\uB9AC", value: codeInput, onChange: (e) => setCodeInput(e.target.value), "data-testid": "verify-email-code-input" })), (codeFromUrl || codeInput) && status === 'idle' && !codeFromUrl && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: submitVerify, "data-testid": "verify-email-submit", children: "\uC778\uC99D\uD558\uAE30" })), status === 'loading' && (0, jsx_runtime_1.jsx)("p", { children: "\uC778\uC99D \uCC98\uB9AC \uC911..." }), status === 'error' && message && (0, jsx_runtime_1.jsx)("p", { role: "alert", children: message })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", { className: className, style: style, "data-testid": "verify-email-form", children: [emailFromUrl && (0, jsx_runtime_1.jsxs)("p", { children: ["\uC774\uBA54\uC77C: ", emailFromUrl] }), !codeFromUrl && ((0, jsx_runtime_1.jsx)("input", { type: "text", placeholder: "\uC778\uC99D \uCF54\uB4DC 6\uC790\uB9AC", value: codeInput, onChange: (e) => setCodeInput(e.target.value), "data-testid": "verify-email-code-input" })), (codeFromUrl || codeInput) && status === 'idle' && !codeFromUrl && ((0, jsx_runtime_1.jsx)("button", { type: "button", onClick: submitVerify, "data-testid": "verify-email-submit", children: "\uC778\uC99D\uD558\uAE30" })), status === 'loading' && (0, jsx_runtime_1.jsx)("p", { children: "\uC778\uC99D \uCC98\uB9AC \uC911..." }), status === 'error' && message && (0, jsx_runtime_1.jsx)("p", { role: "alert", children: message })] }));
 }

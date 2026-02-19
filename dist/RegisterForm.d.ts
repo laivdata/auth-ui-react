@@ -1,5 +1,6 @@
 import type { AuthClientConfig } from './client';
-export interface RegisterFormProps {
+import { type AuthFormLayoutProps } from './form-layout-props';
+export interface RegisterFormProps extends AuthFormLayoutProps {
     config: AuthClientConfig;
     /** 헤더에 표시할 워크스페이스/앱 이름 */
     workspaceName?: string;
@@ -17,4 +18,4 @@ export interface RegisterFormProps {
  * 회원가입 폼. 인증 서버 FE와 동일한 비밀번호·표시명 제약 및 비밀번호 확인 검증.
  * 스타일 적용을 위해 '@laivdata/auth-ui-react/styles.css'를 import 하세요.
  */
-export declare function RegisterForm({ config, workspaceName, loginHref, resendVerificationHref, verificationBaseUrl, layout, onSuccess, }: RegisterFormProps): import("react/jsx-runtime").JSX.Element;
+export declare function RegisterForm({ config, workspaceName, loginHref, resendVerificationHref, verificationBaseUrl, layout, onSuccess, className, containerClassName, cardClassName, formClassName, headerClassName, footerClassName, style, containerStyle, cardStyle, formStyle, headerStyle, footerStyle, }: RegisterFormProps): import("react/jsx-runtime").JSX.Element;

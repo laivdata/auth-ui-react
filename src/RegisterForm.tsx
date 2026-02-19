@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { AuthClientConfig } from './client';
+import { mergeClassName, type AuthFormLayoutProps } from './form-layout-props';
 
 /** 서버 LocalRegisterDto와 동일한 제약 */
 const PASSWORD_MIN = 8;
@@ -7,7 +8,7 @@ const PASSWORD_MAX = 100;
 const DISPLAY_NAME_MIN = 2;
 const DISPLAY_NAME_MAX = 50;
 
-export interface RegisterFormProps {
+export interface RegisterFormProps extends AuthFormLayoutProps {
   config: AuthClientConfig;
   /** 헤더에 표시할 워크스페이스/앱 이름 */
   workspaceName?: string;
@@ -34,6 +35,18 @@ export function RegisterForm({
   verificationBaseUrl,
   layout = 'fullpage',
   onSuccess,
+  className,
+  containerClassName,
+  cardClassName,
+  formClassName,
+  headerClassName,
+  footerClassName,
+  style,
+  containerStyle,
+  cardStyle,
+  formStyle,
+  headerStyle,
+  footerStyle,
 }: RegisterFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -93,8 +106,12 @@ export function RegisterForm({
   const hasFooterLinks = !!(loginHref || resendVerificationHref);
 
   const card = (
-    <div className="auth-card" data-testid="register-form">
-      <div className="auth-header">
+    <div
+      className={mergeClassName('auth-card', cardClassName ?? className)}
+      style={cardStyle ?? style}
+      data-testid="register-form"
+    >
+      <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
         {workspaceName && <h2>{workspaceName}</h2>}
         <p>회원가입</p>
       </div>
@@ -105,7 +122,7 @@ export function RegisterForm({
         </div>
       )}
 
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className={mergeClassName('auth-form', formClassName)} style={formStyle} onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="register-displayName">이름</label>
           <input
@@ -181,7 +198,7 @@ export function RegisterForm({
       </form>
 
       {hasFooterLinks && (
-        <div className="auth-footer">
+        <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
           {loginHref && (
             <a href={loginHref} data-testid="register-login-link">
               이미 계정이 있으신가요?
@@ -202,7 +219,10 @@ export function RegisterForm({
   }
 
   return (
-    <div className="auth-container">
+    <div
+      className={mergeClassName('auth-container', containerClassName)}
+      style={containerStyle}
+    >
       {card}
     </div>
   );

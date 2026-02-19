@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { AuthClientConfig } from './client';
+import { mergeClassName, type AuthFormLayoutProps } from './form-layout-props';
 
-export interface VerifyEmailFormProps {
+export interface VerifyEmailFormProps extends Pick<AuthFormLayoutProps, 'className' | 'style' | 'formClassName' | 'formStyle'> {
   config: AuthClientConfig;
   /** URL 쿼리 문자열 (예: location.search). 없으면 자동으로 window.location.search 사용 */
   search?: string;
@@ -18,6 +19,10 @@ export function VerifyEmailForm({
   search,
   onSuccess,
   onFailure,
+  className,
+  style,
+  formClassName,
+  formStyle,
 }: VerifyEmailFormProps) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState<string | null>(null);
@@ -70,7 +75,7 @@ export function VerifyEmailForm({
 
   if (status === 'success') {
     return (
-      <div data-testid="verify-email-success">
+      <div className={className} style={style} data-testid="verify-email-success">
         <p role="status">{message}</p>
         {onSuccess == null && (
           <a href="/login" data-testid="verify-email-login-link">로그인하기</a>
@@ -80,7 +85,7 @@ export function VerifyEmailForm({
   }
 
   return (
-    <div data-testid="verify-email-form">
+    <div className={className} style={style} data-testid="verify-email-form">
       {emailFromUrl && <p>이메일: {emailFromUrl}</p>}
       {!codeFromUrl && (
         <input

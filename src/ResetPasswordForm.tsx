@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import type { AuthClientConfig } from './client';
+import { mergeClassName, type AuthFormLayoutProps } from './form-layout-props';
 
 const PASSWORD_MIN = 8;
 const PASSWORD_MAX = 100;
 
-export interface ResetPasswordFormProps {
+export interface ResetPasswordFormProps extends AuthFormLayoutProps {
   config: AuthClientConfig;
   search?: string;
   workspaceName?: string;
@@ -32,6 +33,18 @@ export function ResetPasswordForm({
   layout = 'fullpage',
   onSuccess,
   onFailure,
+  className,
+  containerClassName,
+  cardClassName,
+  formClassName,
+  headerClassName,
+  footerClassName,
+  style,
+  containerStyle,
+  cardStyle,
+  formStyle,
+  headerStyle,
+  footerStyle,
 }: ResetPasswordFormProps) {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -105,8 +118,12 @@ export function ResetPasswordForm({
 
   if (success) {
     const successCard = (
-      <div className="auth-card" data-testid="reset-password-success">
-        <div className="auth-header">
+      <div
+        className={mergeClassName('auth-card', cardClassName ?? className)}
+        style={cardStyle ?? style}
+        data-testid="reset-password-success"
+      >
+        <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
           {workspaceName && <h2>{workspaceName}</h2>}
           <p>비밀번호 변경 완료</p>
         </div>
@@ -114,25 +131,33 @@ export function ResetPasswordForm({
           비밀번호가 변경되었습니다. 새 비밀번호로 로그인하세요.
         </div>
         {loginHref && (
-          <div className="auth-footer">
+          <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
             <a href={loginHref} data-testid="reset-password-login-link">로그인하기</a>
           </div>
         )}
       </div>
     );
-    return layout === 'card' ? successCard : <div className="auth-container">{successCard}</div>;
+    return layout === 'card' ? successCard : (
+      <div className={mergeClassName('auth-container', containerClassName)} style={containerStyle}>
+        {successCard}
+      </div>
+    );
   }
 
   const card = (
-    <div className="auth-card" data-testid="reset-password-form">
-      <div className="auth-header">
+    <div
+      className={mergeClassName('auth-card', cardClassName ?? className)}
+      style={cardStyle ?? style}
+      data-testid="reset-password-form"
+    >
+      <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
         {workspaceName && <h2>{workspaceName}</h2>}
         <p>새 비밀번호 설정</p>
       </div>
       {error && (
         <div className="alert alert-danger" role="alert">{error}</div>
       )}
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className={mergeClassName('auth-form', formClassName)} style={formStyle} onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="reset-password-email">이메일 주소</label>
           <input
@@ -196,12 +221,16 @@ export function ResetPasswordForm({
         </button>
       </form>
       {loginHref && (
-        <div className="auth-footer">
+        <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
           <a href={loginHref}>로그인 페이지로 돌아가기</a>
         </div>
       )}
     </div>
   );
 
-  return layout === 'card' ? card : <div className="auth-container">{card}</div>;
+  return layout === 'card' ? card : (
+    <div className={mergeClassName('auth-container', containerClassName)} style={containerStyle}>
+      {card}
+    </div>
+  );
 }

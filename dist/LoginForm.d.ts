@@ -1,6 +1,7 @@
-import { type AuthClientConfig } from './client';
-type OAuth2ProviderName = 'GOOGLE' | 'NAVER' | 'KAKAO';
-export interface LoginFormProps {
+import type { AuthClientConfig } from './client';
+import { type AuthFormLayoutProps } from './form-layout-props';
+import { type OAuth2ProviderName } from './hooks';
+export interface LoginFormProps extends AuthFormLayoutProps {
     config: AuthClientConfig;
     workspaceId?: string;
     redirectUri?: string;
@@ -21,5 +22,4 @@ export interface LoginFormProps {
  * config.authServerBaseUrl 기준으로 GET /api/auth/oauth2/providers를 호출해 사용 가능한 제공자만 자동 표시합니다.
  * 스타일 적용을 위해 '@laivdata/auth-ui-react/styles.css'를 import 하세요.
  */
-export declare function LoginForm({ config, workspaceId, redirectUri, providers: providersProp, workspaceName, registerHref, resetPasswordHref, layout, onSuccess, }: LoginFormProps): import("react/jsx-runtime").JSX.Element;
-export {};
+export declare function LoginForm({ config, workspaceId, redirectUri, providers: providersProp, workspaceName, registerHref, resetPasswordHref, layout, onSuccess, className, containerClassName, cardClassName, formClassName, headerClassName, footerClassName, style, containerStyle, cardStyle, formStyle, headerStyle, footerStyle, }: LoginFormProps): import("react/jsx-runtime").JSX.Element;

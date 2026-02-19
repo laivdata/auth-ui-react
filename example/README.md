@@ -42,7 +42,8 @@ yarn sample:dev
 
 ### SSL(HTTPS)로 실행
 
-인증 서버와 동일한 로컬 SSL 인증서(`ssl/laivdata-*.pem`)를 사용해 HTTPS로 띄울 수 있습니다.
+프로젝트 **루트**의 `ssl/` 디렉터리에 `laivdata-key.pem`, `laivdata-cert.pem`이 있으면 HTTPS로 띄웁니다.  
+인증서가 없으면 agent-auth 프로젝트의 `ssl/` 폴더에서 위 두 파일을 복사해 오면 됩니다.
 
 ```bash
 # 이 디렉터리에서

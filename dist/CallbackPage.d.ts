@@ -1,5 +1,6 @@
 import { type AuthClientConfig } from './client';
-export interface CallbackPageProps {
+import type { AuthFormLayoutProps } from './form-layout-props';
+export interface CallbackPageProps extends Pick<AuthFormLayoutProps, 'className' | 'style'> {
     config: AuthClientConfig;
     /** URL 쿼리 (예: location.search). 없으면 window.location.search 사용 */
     search?: string;
@@ -16,4 +17,4 @@ export interface CallbackPageProps {
  * - code 있음: POST /api/auth/token으로 토큰 교환 → user.wsid에 따라 defaultPath 또는 workspaceJoinPath로 이동.
  * - code 없음: 에러 표시 (로그인 페이지에서 다시 시도 유도).
  */
-export declare function CallbackPage({ config, search, defaultPath, workspaceJoinPath, onSuccess, onFailure, }: CallbackPageProps): import("react/jsx-runtime").JSX.Element;
+export declare function CallbackPage({ config, search, defaultPath, workspaceJoinPath, onSuccess, onFailure, className, style, }: CallbackPageProps): import("react/jsx-runtime").JSX.Element;

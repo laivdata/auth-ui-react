@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginForm = LoginForm;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const react_1 = require("react");
-const client_1 = require("./client");
+const form_layout_props_1 = require("./form-layout-props");
+const hooks_1 = require("./hooks");
 /** 인증 서버 FE와 동일한 OAuth 버튼 문구 (한글) */
 const OAUTH_BUTTON_LABEL = {
     google: '구글',
@@ -30,7 +30,7 @@ function OAuthIcon({ provider }) {
     }
     return null;
 }
-/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 */
+/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 (API 조회 시 반환된 URL용) */
 function buildOAuth2Link(info, redirectUri, workspaceId) {
     if (!redirectUri && !workspaceId)
         return info.loginUrl;
@@ -47,57 +47,16 @@ function buildOAuth2Link(info, redirectUri, workspaceId) {
  * config.authServerBaseUrl 기준으로 GET /api/auth/oauth2/providers를 호출해 사용 가능한 제공자만 자동 표시합니다.
  * 스타일 적용을 위해 '@laivdata/auth-ui-react/styles.css'를 import 하세요.
  */
-function LoginForm({ config, workspaceId, redirectUri, providers: providersProp, workspaceName, registerHref, resetPasswordHref, layout = 'fullpage', onSuccess, }) {
-    const [email, setEmail] = (0, react_1.useState)('');
-    const [password, setPassword] = (0, react_1.useState)('');
-    const [loading, setLoading] = (0, react_1.useState)(false);
-    const [error, setError] = (0, react_1.useState)(null);
-    const [oauth2Providers, setOauth2Providers] = (0, react_1.useState)([]);
-    const baseUrl = config.authServerBaseUrl.replace(/\/$/, '');
-    (0, react_1.useEffect)(() => {
-        if (providersProp != null && providersProp.length > 0) {
-            setOauth2Providers(providersProp.map((p) => ({
-                provider: p,
-                displayName: p.charAt(0) + p.slice(1).toLowerCase(),
-                enabled: true,
-                loginUrl: (0, client_1.getOAuth2ProviderRedirectUrl)(config, { provider: p, redirectUri, workspaceId }),
-            })));
-            return;
-        }
-        let cancelled = false;
-        (0, client_1.getAvailableOAuth2Providers)(config).then((list) => {
-            if (!cancelled)
-                setOauth2Providers(list);
-        });
-        return () => {
-            cancelled = true;
-        };
-    }, [baseUrl, providersProp, config.authServerBaseUrl, redirectUri, workspaceId]);
-    const handleLocalLogin = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setLoading(true);
-        try {
-            const res = await fetch(`${baseUrl}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-                credentials: 'include',
-            });
-            const data = await res.json();
-            if (!res.ok)
-                throw new Error(data.message || '로그인 실패');
-            onSuccess?.();
-        }
-        catch (err) {
-            setError(err instanceof Error ? err.message : '로그인 실패');
-        }
-        finally {
-            setLoading(false);
-        }
-    };
+function LoginForm({ config, workspaceId, redirectUri, providers: providersProp, workspaceName, registerHref, resetPasswordHref, layout = 'fullpage', onSuccess, className, containerClassName, cardClassName, formClassName, headerClassName, footerClassName, style, containerStyle, cardStyle, formStyle, headerStyle, footerStyle, }) {
+    const { email, setEmail, password, setPassword, loading, error, handleSubmit: handleLocalLogin, oauthProviders: oauth2Providers, } = (0, hooks_1.useLoginForm)({
+        config,
+        workspaceId,
+        redirectUri,
+        providers: providersProp,
+        onSuccess,
+    });
     const hasFooterLinks = !!(registerHref || resetPasswordHref);
-    const card = ((0, jsx_runtime_1.jsxs)("div", { className: "auth-card", "data-testid": "login-form", children: [(0, jsx_runtime_1.jsxs)("div", { className: "auth-header", children: [workspaceName && (0, jsx_runtime_1.jsx)("h2", { children: workspaceName }), (0, jsx_runtime_1.jsx)("p", { children: "\uB85C\uADF8\uC778" })] }), error && ((0, jsx_runtime_1.jsx)("div", { className: "alert alert-danger", role: "alert", children: error })), (0, jsx_runtime_1.jsxs)("form", { className: "auth-form", onSubmit: handleLocalLogin, children: [(0, jsx_runtime_1.jsxs)("div", { className: "form-group", children: [(0, jsx_runtime_1.jsx)("label", { htmlFor: "login-email", children: "\uC774\uBA54\uC77C" }), (0, jsx_runtime_1.jsx)("input", { id: "login-email", type: "email", name: "email", placeholder: "\uC774\uBA54\uC77C", value: email, onChange: (e) => setEmail(e.target.value), required: true, "data-testid": "login-email", autoComplete: "email" })] }), (0, jsx_runtime_1.jsxs)("div", { className: "form-group", children: [(0, jsx_runtime_1.jsx)("label", { htmlFor: "login-password", children: "\uBE44\uBC00\uBC88\uD638" }), (0, jsx_runtime_1.jsx)("input", { id: "login-password", type: "password", name: "password", placeholder: "\uBE44\uBC00\uBC88\uD638", value: password, onChange: (e) => setPassword(e.target.value), required: true, "data-testid": "login-password", autoComplete: "current-password" })] }), (0, jsx_runtime_1.jsx)("button", { type: "submit", className: "btn btn-primary", disabled: loading, "data-testid": "login-submit", children: loading ? '로그인 중...' : '로그인' })] }), hasFooterLinks && ((0, jsx_runtime_1.jsxs)("div", { className: "auth-footer", children: [registerHref && ((0, jsx_runtime_1.jsx)("a", { href: registerHref, "data-testid": "login-register-link", children: "\uACC4\uC815\uC774 \uC5C6\uC73C\uC2E0\uAC00\uC694?" })), resetPasswordHref && ((0, jsx_runtime_1.jsx)("a", { href: resetPasswordHref, "data-testid": "login-reset-password-link", children: "\uBE44\uBC00\uBC88\uD638\uB97C \uC78A\uC73C\uC168\uB098\uC694?" }))] })), oauth2Providers.length > 0 && ((0, jsx_runtime_1.jsxs)("div", { className: "social-login", children: [(0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("span", { children: "or" }) }), (0, jsx_runtime_1.jsx)("div", { className: "social-buttons", children: oauth2Providers.map((p) => {
+    const card = ((0, jsx_runtime_1.jsxs)("div", { className: (0, form_layout_props_1.mergeClassName)('auth-card', cardClassName ?? className), style: cardStyle ?? style, "data-testid": "login-form", children: [(0, jsx_runtime_1.jsxs)("div", { className: (0, form_layout_props_1.mergeClassName)('auth-header', headerClassName), style: headerStyle, children: [workspaceName && (0, jsx_runtime_1.jsx)("h2", { children: workspaceName }), (0, jsx_runtime_1.jsx)("p", { children: "\uB85C\uADF8\uC778" })] }), error && ((0, jsx_runtime_1.jsx)("div", { className: "alert alert-danger", role: "alert", children: error })), (0, jsx_runtime_1.jsxs)("form", { className: (0, form_layout_props_1.mergeClassName)('auth-form', formClassName), style: formStyle, onSubmit: handleLocalLogin, children: [(0, jsx_runtime_1.jsxs)("div", { className: "form-group", children: [(0, jsx_runtime_1.jsx)("label", { htmlFor: "login-email", children: "\uC774\uBA54\uC77C" }), (0, jsx_runtime_1.jsx)("input", { id: "login-email", type: "email", name: "email", placeholder: "\uC774\uBA54\uC77C", value: email, onChange: (e) => setEmail(e.target.value), required: true, "data-testid": "login-email", autoComplete: "email" })] }), (0, jsx_runtime_1.jsxs)("div", { className: "form-group", children: [(0, jsx_runtime_1.jsx)("label", { htmlFor: "login-password", children: "\uBE44\uBC00\uBC88\uD638" }), (0, jsx_runtime_1.jsx)("input", { id: "login-password", type: "password", name: "password", placeholder: "\uBE44\uBC00\uBC88\uD638", value: password, onChange: (e) => setPassword(e.target.value), required: true, "data-testid": "login-password", autoComplete: "current-password" })] }), (0, jsx_runtime_1.jsx)("button", { type: "submit", className: "btn btn-primary", disabled: loading, "data-testid": "login-submit", children: loading ? '로그인 중...' : '로그인' })] }), hasFooterLinks && ((0, jsx_runtime_1.jsxs)("div", { className: (0, form_layout_props_1.mergeClassName)('auth-footer', footerClassName), style: footerStyle, children: [registerHref && ((0, jsx_runtime_1.jsx)("a", { href: registerHref, "data-testid": "login-register-link", children: "\uACC4\uC815\uC774 \uC5C6\uC73C\uC2E0\uAC00\uC694?" })), resetPasswordHref && ((0, jsx_runtime_1.jsx)("a", { href: resetPasswordHref, "data-testid": "login-reset-password-link", children: "\uBE44\uBC00\uBC88\uD638\uB97C \uC78A\uC73C\uC168\uB098\uC694?" }))] })), oauth2Providers.length > 0 && ((0, jsx_runtime_1.jsxs)("div", { className: "social-login", children: [(0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("span", { children: "or" }) }), (0, jsx_runtime_1.jsx)("div", { className: "social-buttons", children: oauth2Providers.map((p) => {
                             const url = providersProp != null
                                 ? p.loginUrl
                                 : buildOAuth2Link(p, redirectUri, workspaceId);
@@ -108,5 +67,5 @@ function LoginForm({ config, workspaceId, redirectUri, providers: providersProp,
     if (layout === 'card') {
         return card;
     }
-    return ((0, jsx_runtime_1.jsx)("div", { className: "auth-container", children: card }));
+    return ((0, jsx_runtime_1.jsx)("div", { className: (0, form_layout_props_1.mergeClassName)('auth-container', containerClassName), style: containerStyle, children: card }));
 }

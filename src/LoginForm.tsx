@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import {
-  getAvailableOAuth2Providers,
-  getOAuth2ProviderRedirectUrl,
-  type AuthClientConfig,
-  type OAuth2ProviderInfo,
-} from './client';
-
-type OAuth2ProviderName = 'GOOGLE' | 'NAVER' | 'KAKAO';
+import React from 'react';
+import type { AuthClientConfig, OAuth2ProviderInfo } from './client';
+import { mergeClassName, type AuthFormLayoutProps } from './form-layout-props';
+import { useLoginForm, type OAuth2ProviderName } from './hooks';
 
 /** 인증 서버 FE와 동일한 OAuth 버튼 문구 (한글) */
 const OAUTH_BUTTON_LABEL: Record<string, string> = {
@@ -69,7 +64,7 @@ function OAuthIcon({ provider }: { provider: string }) {
   return null;
 }
 
-/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 */
+/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 (API 조회 시 반환된 URL용) */
 function buildOAuth2Link(
   info: OAuth2ProviderInfo,
   redirectUri?: string,
@@ -83,7 +78,7 @@ function buildOAuth2Link(
   return `${info.loginUrl}${sep}${params.toString()}`;
 }
 
-export interface LoginFormProps {
+export interface LoginFormProps extends AuthFormLayoutProps {
   config: AuthClientConfig;
   workspaceId?: string;
   redirectUri?: string;
@@ -115,62 +110,45 @@ export function LoginForm({
   resetPasswordHref,
   layout = 'fullpage',
   onSuccess,
+  className,
+  containerClassName,
+  cardClassName,
+  formClassName,
+  headerClassName,
+  footerClassName,
+  style,
+  containerStyle,
+  cardStyle,
+  formStyle,
+  headerStyle,
+  footerStyle,
 }: LoginFormProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [oauth2Providers, setOauth2Providers] = useState<OAuth2ProviderInfo[]>([]);
-
-  const baseUrl = config.authServerBaseUrl.replace(/\/$/, '');
-
-  useEffect(() => {
-    if (providersProp != null && providersProp.length > 0) {
-      setOauth2Providers(
-        providersProp.map((p) => ({
-          provider: p,
-          displayName: p.charAt(0) + p.slice(1).toLowerCase(),
-          enabled: true,
-          loginUrl: getOAuth2ProviderRedirectUrl(config, { provider: p, redirectUri, workspaceId }),
-        })),
-      );
-      return;
-    }
-    let cancelled = false;
-    getAvailableOAuth2Providers(config).then((list) => {
-      if (!cancelled) setOauth2Providers(list);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [baseUrl, providersProp, config.authServerBaseUrl, redirectUri, workspaceId]);
-
-  const handleLocalLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await fetch(`${baseUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || '로그인 실패');
-      onSuccess?.();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '로그인 실패');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    loading,
+    error,
+    handleSubmit: handleLocalLogin,
+    oauthProviders: oauth2Providers,
+  } = useLoginForm({
+    config,
+    workspaceId,
+    redirectUri,
+    providers: providersProp,
+    onSuccess,
+  });
 
   const hasFooterLinks = !!(registerHref || resetPasswordHref);
 
   const card = (
-    <div className="auth-card" data-testid="login-form">
-      <div className="auth-header">
+    <div
+      className={mergeClassName('auth-card', cardClassName ?? className)}
+      style={cardStyle ?? style}
+      data-testid="login-form"
+    >
+      <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
         {workspaceName && <h2>{workspaceName}</h2>}
         <p>로그인</p>
       </div>
@@ -181,7 +159,7 @@ export function LoginForm({
         </div>
       )}
 
-      <form className="auth-form" onSubmit={handleLocalLogin}>
+      <form className={mergeClassName('auth-form', formClassName)} style={formStyle} onSubmit={handleLocalLogin}>
         <div className="form-group">
           <label htmlFor="login-email">이메일</label>
           <input
@@ -223,7 +201,7 @@ export function LoginForm({
       </form>
 
       {hasFooterLinks && (
-        <div className="auth-footer">
+        <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
           {registerHref && (
             <a href={registerHref} data-testid="login-register-link">
               계정이 없으신가요?
@@ -272,7 +250,10 @@ export function LoginForm({
   }
 
   return (
-    <div className="auth-container">
+    <div
+      className={mergeClassName('auth-container', containerClassName)}
+      style={containerStyle}
+    >
       {card}
     </div>
   );

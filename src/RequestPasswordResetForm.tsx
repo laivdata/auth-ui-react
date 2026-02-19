@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { AuthClientConfig } from './client';
+import { mergeClassName, type AuthFormLayoutProps } from './form-layout-props';
 
-export interface RequestPasswordResetFormProps {
+export interface RequestPasswordResetFormProps extends AuthFormLayoutProps {
   config: AuthClientConfig;
   /** OAuth/OIDC 컨텍스트 (선택, BE에 그대로 전달) */
   context?: string;
@@ -28,6 +29,18 @@ export function RequestPasswordResetForm({
   loginHref,
   layout = 'fullpage',
   onSuccess,
+  className,
+  containerClassName,
+  cardClassName,
+  formClassName,
+  headerClassName,
+  footerClassName,
+  style,
+  containerStyle,
+  cardStyle,
+  formStyle,
+  headerStyle,
+  footerStyle,
 }: RequestPasswordResetFormProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -64,8 +77,12 @@ export function RequestPasswordResetForm({
 
   if (sent) {
     const sentCard = (
-      <div className="auth-card" data-testid="request-password-reset-sent">
-        <div className="auth-header">
+      <div
+        className={mergeClassName('auth-card', cardClassName ?? className)}
+        style={cardStyle ?? style}
+        data-testid="request-password-reset-sent"
+      >
+        <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
           {workspaceName && <h2>{workspaceName}</h2>}
           <p>이메일 발송 완료</p>
         </div>
@@ -73,18 +90,26 @@ export function RequestPasswordResetForm({
           비밀번호 재설정 메일을 보냈습니다. 이메일을 확인해주세요.
         </div>
         {loginHref && (
-          <div className="auth-footer">
+          <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
             <a href={loginHref}>로그인 페이지로 돌아가기</a>
           </div>
         )}
       </div>
     );
-    return layout === 'card' ? sentCard : <div className="auth-container">{sentCard}</div>;
+    return layout === 'card' ? sentCard : (
+      <div className={mergeClassName('auth-container', containerClassName)} style={containerStyle}>
+        {sentCard}
+      </div>
+    );
   }
 
   const card = (
-    <div className="auth-card" data-testid="request-password-reset-form">
-      <div className="auth-header">
+    <div
+      className={mergeClassName('auth-card', cardClassName ?? className)}
+      style={cardStyle ?? style}
+      data-testid="request-password-reset-form"
+    >
+      <div className={mergeClassName('auth-header', headerClassName)} style={headerStyle}>
         {workspaceName && <h2>{workspaceName}</h2>}
         <p>비밀번호 재설정</p>
       </div>
@@ -95,7 +120,7 @@ export function RequestPasswordResetForm({
         </div>
       )}
 
-      <form className="auth-form" onSubmit={handleSubmit}>
+      <form className={mergeClassName('auth-form', formClassName)} style={formStyle} onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="request-password-reset-email">이메일 주소</label>
           <input
@@ -122,7 +147,7 @@ export function RequestPasswordResetForm({
       </form>
 
       {loginHref && (
-        <div className="auth-footer">
+        <div className={mergeClassName('auth-footer', footerClassName)} style={footerStyle}>
           <a href={loginHref}>로그인 페이지로 돌아가기</a>
         </div>
       )}
@@ -130,5 +155,9 @@ export function RequestPasswordResetForm({
   );
 
   if (layout === 'card') return card;
-  return <div className="auth-container">{card}</div>;
+  return (
+    <div className={mergeClassName('auth-container', containerClassName)} style={containerStyle}>
+      {card}
+    </div>
+  );
 }

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { AuthClientConfig } from './client';
+import type { AuthFormLayoutProps } from './form-layout-props';
 
-export interface ResendVerificationFormProps {
+export interface ResendVerificationFormProps extends Pick<AuthFormLayoutProps, 'className' | 'style' | 'formClassName' | 'formStyle'> {
   config: AuthClientConfig;
   /** 이메일 인증 페이지 URL. 넘기면 그대로 사용, 미지정 시 인증 서버에서 FRONTEND_BASE_URL + VERIFY_EMAIL_PATH 조합 */
   verificationBaseUrl?: string;
@@ -16,6 +17,10 @@ export function ResendVerificationForm({
   config,
   verificationBaseUrl,
   onSuccess,
+  className,
+  style,
+  formClassName,
+  formStyle,
 }: ResendVerificationFormProps) {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -51,15 +56,15 @@ export function ResendVerificationForm({
 
   if (sent) {
     return (
-      <div data-testid="resend-verification-sent">
+      <div className={className} style={style} data-testid="resend-verification-sent">
         <p role="status">인증 메일을 다시 보냈습니다. 이메일을 확인해주세요.</p>
       </div>
     );
   }
 
   return (
-    <div data-testid="resend-verification-form">
-      <form onSubmit={handleSubmit}>
+    <div className={className} style={style} data-testid="resend-verification-form">
+      <form className={formClassName} style={formStyle} onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="이메일"

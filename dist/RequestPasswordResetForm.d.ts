@@ -1,5 +1,6 @@
 import type { AuthClientConfig } from './client';
-export interface RequestPasswordResetFormProps {
+import { type AuthFormLayoutProps } from './form-layout-props';
+export interface RequestPasswordResetFormProps extends AuthFormLayoutProps {
     config: AuthClientConfig;
     /** OAuth/OIDC 컨텍스트 (선택, BE에 그대로 전달) */
     context?: string;
@@ -17,4 +18,4 @@ export interface RequestPasswordResetFormProps {
  * 비밀번호 재설정 요청 폼. 이메일 입력 후 POST /api/auth/request-password-reset.
  * 스타일: '@laivdata/auth-ui-react/styles.css'
  */
-export declare function RequestPasswordResetForm({ config, context, resetPasswordBaseUrl, workspaceName, loginHref, layout, onSuccess, }: RequestPasswordResetFormProps): import("react/jsx-runtime").JSX.Element;
+export declare function RequestPasswordResetForm({ config, context, resetPasswordBaseUrl, workspaceName, loginHref, layout, onSuccess, className, containerClassName, cardClassName, formClassName, headerClassName, footerClassName, style, containerStyle, cardStyle, formStyle, headerStyle, footerStyle, }: RequestPasswordResetFormProps): import("react/jsx-runtime").JSX.Element;

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { AuthClientConfig } from './client';
+import type { AuthFormLayoutProps } from './form-layout-props';
 
-export interface WorkspaceJoinFormProps {
+export interface WorkspaceJoinFormProps extends Pick<AuthFormLayoutProps, 'className' | 'style' | 'formClassName' | 'formStyle'> {
   config: AuthClientConfig;
   workspaceId: string;
   onSuccess?: () => void;
@@ -10,7 +11,15 @@ export interface WorkspaceJoinFormProps {
 /**
  * 워크스페이스 가입 폼 (비밀번호가 필요한 경우 secret 입력).
  */
-export function WorkspaceJoinForm({ config, workspaceId, onSuccess }: WorkspaceJoinFormProps) {
+export function WorkspaceJoinForm({
+  config,
+  workspaceId,
+  onSuccess,
+  className,
+  style,
+  formClassName,
+  formStyle,
+}: WorkspaceJoinFormProps) {
   const [secret, setSecret] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,8 +48,8 @@ export function WorkspaceJoinForm({ config, workspaceId, onSuccess }: WorkspaceJ
   };
 
   return (
-    <div data-testid="workspace-join-form">
-      <form onSubmit={handleSubmit}>
+    <div className={className} style={style} data-testid="workspace-join-form">
+      <form className={formClassName} style={formStyle} onSubmit={handleSubmit}>
         <input
           type="password"
           placeholder="가입 비밀번호 (필요한 경우)"

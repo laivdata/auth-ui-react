@@ -36,7 +36,8 @@ npm install git+https://github.com/laivdata/auth-ui-react.git react
 ## 사용
 
 설정·유틸·컴포넌트를 모두 이 패키지에서 import 합니다.  
-**로그인/인증 UI를 인증 서버 FE와 동일한 Figma 디자인으로 쓰려면 스타일을 import 하세요.**
+**로그인/인증 UI를 인증 서버 FE와 동일한 Figma 디자인으로 쓰려면 스타일을 import 하세요.**  
+UI를 바꾸는 방법은 두 가지입니다. **CSS만 바꾸기**: [스타일 커스터마이징 (CSS 변수)](docs/styling.md)에서 `--auth-*` 변수·className 사용법 참고. **디자인 컴포넌트 주입**: [커스터마이징 (주입 경로)](#커스터마이징)에서 `useLoginForm`·`LoginFormCustom`·계약 타입 사용법 참고.
 
 ```tsx
 import '@laivdata/auth-ui-react/styles.css';
@@ -98,11 +99,18 @@ const config: AuthClientConfig = {
 | `getLoginPageUrl(config)` | 인증 서버 로그인 페이지 URL |
 | `createMemoryStorage()` / `createLocalStorageStorage(key)` | 토큰 저장소 (테스트·Different subdomain용) |
 
+### 훅
+
+| 이름 | 용도 |
+|------|------|
+| **useLoginForm** | 로그인 폼 상태·제출·OAuth2 제공자 목록. 반환: `email`, `setEmail`, `password`, `setPassword`, `loading`, `error`, `setError`, `handleSubmit`, `oauthProviders`. 주입 경로에서 자체 UI와 연결할 때 사용. |
+
 ### 컴포넌트
 
 | 컴포넌트 | 용도 |
 |----------|------|
 | **LoginForm** | 로컬(이메일/비밀번호) + OAuth2. 인증 서버 FE와 동일한 카드·헤더·폼·푸터·소셜 버튼 구조. `workspaceName`(헤더), `registerHref`, `resetPasswordHref`(푸터 링크), `layout`(`'fullpage'` 또는 `'card'`) 옵션. OAuth2 제공자는 `GET /api/auth/oauth2/providers` 자동 조회. |
+| **LoginFormCustom** | 로그인 폼 주입용 래퍼. `useLoginForm` 로직 + `components`(Container, Card, Input, Label, Button, Alert, Link, OAuthButton)로 UI만 주입. 미주입 시 기본 div/input/button 사용. |
 | **RegisterForm** | 이메일·비밀번호·표시명 회원가입. |
 | **VerifyEmailForm** | 이메일 인증 (쿼리 `email`, `code` 또는 직접 입력). |
 | **ResendVerificationForm** | 인증 메일 재전송. |
@@ -110,6 +118,47 @@ const config: AuthClientConfig = {
 | **WorkspaceJoinForm** | 워크스페이스 가입 (workspaceId, secret 등). |
 | **RequestPasswordResetForm** | 비밀번호 재설정 요청 (이메일 발송). |
 | **ResetPasswordForm** | 비밀번호 변경 (쿼리 `email`, `code` 또는 입력). |
+
+---
+
+## 커스터마이징
+
+### 1. CSS 변수·className (기본 디자인 유지)
+
+- **스타일 시트**: `import '@laivdata/auth-ui-react/styles.css'` 후, [스타일 커스터마이징 (CSS 변수)](docs/styling.md)에서 `--auth-*` 변수 목록·용도·사용 예시 참고.
+- **레이아웃 className/style**: `LoginForm`, `RegisterForm` 등은 `AuthFormLayoutProps`를 지원합니다. `containerClassName`, `cardClassName`, `formClassName`, `headerClassName`, `footerClassName` 및 대응 `*Style`로 최상위·카드·폼·헤더·푸터에 클래스/인라인 스타일을 줄 수 있습니다.
+
+### 2. 주입 경로 (디자인 컴포넌트 직접 주입)
+
+자체 디자인 시스템(버튼·입력·카드 등)을 쓰려면 **훅 + 주입 래퍼**를 사용하세요.
+
+- **훅**: `useLoginForm({ config, workspaceId?, redirectUri?, providers?, onSuccess? })` → `{ email, setEmail, password, setPassword, loading, error, setError, handleSubmit, oauthProviders }`.  
+  이 값으로 자체 폼을 완전히 그리거나, 아래 래퍼에 컴포넌트만 넘길 수 있습니다.
+- **래퍼**: `LoginFormCustom`에 `components?: LoginFormCustomComponents`를 넘기면, 해당 슬롯만 주입된 컴포넌트로 렌더합니다.  
+  **각 슬롯의 규격(필수 prop·용도)은 [주입용 디자인 컴포넌트 규격](docs/custom-components.md)을 참고하세요.**
+
+```tsx
+import {
+  useLoginForm,
+  LoginFormCustom,
+  type LoginFormCustomComponents,
+  type AuthCardProps,
+  type AuthButtonProps,
+} from '@laivdata/auth-ui-react';
+
+// 예: 카드·버튼만 주입
+const MyCard: React.FC<AuthCardProps> = ({ children, className }) => (
+  <div className={className} data-theme="my-app">{children}</div>
+);
+const MyButton: React.FC<AuthButtonProps> = (props) => <YourButton {...props} />;
+
+<LoginFormCustom
+  config={config}
+  providers={['GOOGLE']}
+  onSuccess={() => navigate('/')}
+  components={{ Card: MyCard, Button: MyButton }}
+/>
+```
 
 ---
 

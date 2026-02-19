@@ -1,1 +1,5 @@
 node_modules
+
+# SSL 인증서 (로컬 개발용, agent-auth/ssl에서 복사)
+ssl/*.pem
+!ssl/.gitkeep
