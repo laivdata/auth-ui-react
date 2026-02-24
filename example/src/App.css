@@ -88,16 +88,94 @@
   margin-right: auto;
 }
 
-/* 스타일 커스텀 탭: className만으로 테마 변경 예시 */
+/* 스타일 커스텀 탭: 기본과 확 달라 보이는 테마 예시 (다크 + 포인트 컬러) */
 .sample-styled-container {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding: 1.5rem;
-  border-radius: 12px;
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 40%, #334155 100%);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 .sample-styled-card {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(180deg, #fefce8 0%, #fef9c3 100%);
+  border-radius: 16px;
+  border: 2px solid #ca8a04;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(202, 138, 4, 0.2);
+  overflow: hidden;
+}
+/* 스타일 탭 내부 폼 요소 오버라이드 */
+.sample-styled-container .sample-section h2,
+.sample-styled-container .auth-card [class*="title"],
+.sample-styled-container .auth-card label {
+  color: #422006;
+  font-weight: 600;
+}
+.sample-styled-container input[type="email"],
+.sample-styled-container input[type="password"],
+.sample-styled-container input[type="text"] {
+  background: #fffbeb;
+  border: 2px solid #ca8a04;
+  border-radius: 10px;
+  color: #422006;
+  font-size: 0.9375rem;
+  padding: 0.6rem 0.9rem;
+}
+.sample-styled-container input::placeholder {
+  color: #a16207;
+  opacity: 0.8;
+}
+.sample-styled-container input:focus {
+  outline: none;
+  border-color: #a16207;
+  box-shadow: 0 0 0 3px rgba(202, 138, 4, 0.25);
+}
+.sample-styled-container button[type="submit"] {
+  background: linear-gradient(180deg, #b45309 0%, #92400e 100%);
+  color: #fffbeb;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.25rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(146, 64, 14, 0.4);
+}
+.sample-styled-container button[type="submit"]:hover {
+  background: linear-gradient(180deg, #92400e 0%, #78350f 100%);
+  box-shadow: 0 4px 12px rgba(146, 64, 14, 0.45);
+}
+.sample-styled-container button[type="button"] {
+  background: #fffbeb;
+  border: 2px solid #ca8a04;
+  color: #78350f;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.sample-styled-container button[type="button"]:hover {
+  background: #fef3c7;
+  border-color: #a16207;
+}
+.sample-styled-container [role="alert"] {
+  color: #b91c1c;
+  font-weight: 500;
+}
+.sample-styled-container a {
+  color: #92400e;
+  font-weight: 600;
+}
+.sample-styled-container a:hover {
+  color: #b45309;
+  text-decoration: underline;
+}
+.sample-styled-container .auth-ui-react-oauth-buttons a.auth-ui-react-oauth-button {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #fef9c3;
+  border: 1px solid rgba(254, 249, 195, 0.3);
+  border-radius: 10px;
+  font-weight: 500;
+}
+.sample-styled-container .auth-ui-react-oauth-buttons a.auth-ui-react-oauth-button:hover {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  color: #fef9c3;
+  border-color: rgba(254, 249, 195, 0.5);
 }
 
 .sample-section form {
