@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import '@laivdata/auth-ui-react/styles.css';
 import {
@@ -6,12 +6,15 @@ import {
   getAuthServerLoginUrl,
   type AuthClientConfig,
   LoginForm,
+  LoginFormCustom,
   RegisterForm,
+  RegisterFormCustom,
   WorkspaceJoinForm,
   VerifyEmailForm,
   ResendVerificationForm,
   CallbackPage,
   RequestPasswordResetForm,
+  RequestPasswordResetFormCustom,
   ResetPasswordForm,
 } from '@laivdata/auth-ui-react';
 import './App.css';
@@ -34,6 +37,18 @@ const config: AuthClientConfig = {
 
 /** OAuth2 state용: 워크스페이스 ID (인증 서버에 등록된 값, allowedDomains에 예제 앱 도메인 포함 필요) */
 const oauth2WorkspaceId = import.meta.env.VITE_OAUTH2_WORKSPACE_ID || 'unknown';
+
+/** /custom 경로용: 주입 예시 컴포넌트 (카드·버튼 등 시각적으로 구분) */
+const customLoginComponents = {
+  Card: ({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => (
+    <div className={className} style={{ ...style, border: '2px solid #0d6efd', borderRadius: 8, padding: '1rem' }} data-testid="custom-login-card">
+      {children}
+    </div>
+  ),
+  Button: (props: React.ComponentProps<'button'>) => (
+    <button {...props} style={{ ...(props.style as object), background: '#0d6efd', color: '#fff', padding: '0.5rem 1rem', border: 'none', borderRadius: 4 }} />
+  ),
+};
 
 /** GET /api/auth/me로 로그인 여부·연결 계정 타입 조회 (credentials: include) */
 function useAuthMe() {
@@ -122,7 +137,7 @@ function NavItem({
 function Layout({ basePath }: { basePath: string }) {
   const path = useLocation().pathname;
   const isCallback = path === '/auth/callback';
-  const isVerifyEmail = path === '/verify-email' || path === '/default/verify-email' || path === '/custom/verify-email';
+  const isVerifyEmail = path === '/verify-email' || path === '/default/verify-email' || path === '/style/verify-email' || path === '/custom/verify-email';
   const isResetPassword = path === '/reset-password';
   const hideNav = isCallback || isVerifyEmail || isResetPassword;
   const { authenticated, hasLocalAccount, refetch } = useAuthMe();
@@ -153,7 +168,7 @@ function Layout({ basePath }: { basePath: string }) {
     <div className="sample">
       {!hideNav && (
         <header className="sample-header">
-          <h1>auth-ui-react 샘플 · {basePath === '/custom' ? 'Custom UI' : 'Default'}</h1>
+          <h1>auth-ui-react 샘플 · {basePath === '/custom' ? '컴포넌트 주입' : basePath === '/style' ? '스타일 커스텀' : '기본'}</h1>
           <p className="sample-auth-url">
             인증 서버: {config.authServerBaseUrl}
           </p>
@@ -192,7 +207,7 @@ function Layout({ basePath }: { basePath: string }) {
   );
 }
 
-/** 최상단: Default / Custom 중 선택 */
+/** 최상단: 기본 / 스타일 커스텀 / 컴포넌트 주입 중 선택 */
 function ChoicePage() {
   const navigate = useNavigate();
   return (
@@ -206,9 +221,20 @@ function ChoicePage() {
           onClick={() => navigate('/default')}
           data-testid="choice-default"
         >
-          <span className="sample-choice-btn-label">Default</span>
+          <span className="sample-choice-btn-label">기본</span>
           <span className="sample-choice-btn-desc">
-            기본 스타일 폼을 그대로 사용합니다. CSS 변수(:root의 --auth-*)만 오버라이드해 색·간격을 바꿀 수 있습니다.
+            기본 스타일 폼을 그대로 사용합니다. styles.css + CSS 변수(:root의 --auth-*)로 색·간격을 바꿀 수 있습니다.
+          </span>
+        </button>
+        <button
+          type="button"
+          className="sample-choice-btn"
+          onClick={() => navigate('/style')}
+          data-testid="choice-style"
+        >
+          <span className="sample-choice-btn-label">스타일 커스텀</span>
+          <span className="sample-choice-btn-desc">
+            같은 폼에 className, cardClassName, style만 적용해 테마/레이아웃만 바꾼 예시입니다.
           </span>
         </button>
         <button
@@ -217,9 +243,9 @@ function ChoicePage() {
           onClick={() => navigate('/custom')}
           data-testid="choice-custom"
         >
-          <span className="sample-choice-btn-label">Custom</span>
+          <span className="sample-choice-btn-label">컴포넌트 주입</span>
           <span className="sample-choice-btn-desc">
-            나중에 주입용 컴포넌트(훅·래퍼)를 사용하는 경로입니다. 현재는 Default와 동일한 폼을 표시합니다.
+            LoginFormCustom, RegisterFormCustom 등에 components를 넘겨 UI를 자체 컴포넌트로 교체한 예시입니다.
           </span>
         </button>
       </div>
@@ -232,6 +258,15 @@ export default function App() {
     <Routes>
       <Route path="/" element={<ChoicePage />} />
       <Route path="/default" element={<Layout basePath="/default" />}>
+        <Route index element={<Home />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="verify-email" element={<VerifyEmail />} />
+        <Route path="resend-verification" element={<ResendVerification />} />
+        <Route path="workspace-join" element={<WorkspaceJoin />} />
+        <Route path="reset-password-request" element={<RequestPasswordReset />} />
+      </Route>
+      <Route path="/style" element={<Layout basePath="/style" />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -271,7 +306,9 @@ function Home() {
 
 function useBasePath(): string {
   const path = useLocation().pathname;
-  return path.startsWith('/custom') ? '/custom' : '/default';
+  if (path.startsWith('/custom')) return '/custom';
+  if (path.startsWith('/style')) return '/style';
+  return '/default';
 }
 
 function Login() {
@@ -300,42 +337,73 @@ function Login() {
           response_type=code 전달)
         </p>
       </div>
-      <LoginForm
-        config={config}
-        workspaceId={oauth2WorkspaceId}
-        redirectUri={getCallbackRedirectUri(config)}
-        workspaceName="auth-ui-react 샘플"
-        registerHref={`${basePath}/register`}
-        resetPasswordHref={`${basePath}/reset-password-request`}
-        layout="card"
-        onSuccess={() => {
-          console.log('[auth-ui-react sample]', 'success', '로그인 성공');
-          window.location.href = basePath;
-        }}
-      />
+      {basePath === '/custom' ? (
+        <LoginFormCustom
+          config={config}
+          workspaceId={oauth2WorkspaceId}
+          redirectUri={getCallbackRedirectUri(config)}
+          workspaceName="auth-ui-react 샘플"
+          registerHref={`${basePath}/register`}
+          resetPasswordHref={`${basePath}/reset-password-request`}
+          onSuccess={() => {
+            console.log('[auth-ui-react sample]', 'success', '로그인 성공');
+            window.location.href = basePath;
+          }}
+          components={customLoginComponents}
+        />
+      ) : (
+        <LoginForm
+          config={config}
+          workspaceId={oauth2WorkspaceId}
+          redirectUri={getCallbackRedirectUri(config)}
+          workspaceName="auth-ui-react 샘플"
+          registerHref={`${basePath}/register`}
+          resetPasswordHref={`${basePath}/reset-password-request`}
+          layout="card"
+          cardClassName={basePath === '/style' ? 'auth-card sample-styled-card' : undefined}
+          containerClassName={basePath === '/style' ? 'auth-container sample-styled-container' : undefined}
+          onSuccess={() => {
+            console.log('[auth-ui-react sample]', 'success', '로그인 성공');
+            window.location.href = basePath;
+          }}
+        />
+      )}
     </section>
   );
 }
 
+const customRegisterComponents = {
+  Card: ({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => (
+    <div className={className} style={{ ...style, border: '2px solid #198754', borderRadius: 8, padding: '1rem' }} data-testid="custom-register-card">
+      {children}
+    </div>
+  ),
+};
+
 function Register() {
   const basePath = useBasePath();
+  const commonProps = {
+    config,
+    workspaceName: 'auth-ui-react 샘플',
+    loginHref: `${basePath}/login`,
+    resendVerificationHref: `${basePath}/resend-verification`,
+    onSuccess: () => {
+      console.log('[auth-ui-react sample]', 'success', '회원가입 성공. 이메일 인증 링크를 확인하세요.');
+      window.location.href = `${basePath}/login`;
+    },
+  };
   return (
     <section className="sample-section sample-section--auth">
-      <RegisterForm
-        config={config}
-        workspaceName="auth-ui-react 샘플"
-        loginHref={`${basePath}/login`}
-        resendVerificationHref={`${basePath}/resend-verification`}
-        layout="card"
-        onSuccess={() => {
-          console.log(
-            '[auth-ui-react sample]',
-            'success',
-            '회원가입 성공. 이메일 인증 링크를 확인하세요.',
-          );
-          window.location.href = `${basePath}/login`;
-        }}
-      />
+      {basePath === '/custom' ? (
+        <RegisterFormCustom {...commonProps} components={customRegisterComponents} />
+      ) : (
+        <RegisterForm
+          {...commonProps}
+          layout="card"
+          cardClassName={basePath === '/style' ? 'auth-card sample-styled-card' : undefined}
+          containerClassName={basePath === '/style' ? 'auth-container sample-styled-container' : undefined}
+        />
+      )}
     </section>
   );
 }
@@ -445,24 +513,37 @@ function WorkspaceJoin() {
   );
 }
 
+const customRequestPasswordResetComponents = {
+  Card: ({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) => (
+    <div className={className} style={{ ...style, border: '2px solid #fd7e14', borderRadius: 8, padding: '1rem' }} data-testid="custom-request-password-reset-card">
+      {children}
+    </div>
+  ),
+};
+
 function RequestPasswordReset() {
   const basePath = useBasePath();
+  const commonProps = {
+    config,
+    resetPasswordBaseUrl: `${appOrigin.replace(/\/$/, '')}/reset-password`,
+    workspaceName: 'auth-ui-react 샘플',
+    loginHref: `${basePath}/login`,
+    onSuccess: () => {
+      console.log('[auth-ui-react sample]', 'success', '비밀번호 재설정 메일을 발송했습니다.');
+    },
+  };
   return (
     <section className="sample-section sample-section--auth">
-      <RequestPasswordResetForm
-        config={config}
-        resetPasswordBaseUrl={`${appOrigin.replace(/\/$/, '')}/reset-password`}
-        workspaceName="auth-ui-react 샘플"
-        loginHref={`${basePath}/login`}
-        layout="card"
-        onSuccess={() => {
-          console.log(
-            '[auth-ui-react sample]',
-            'success',
-            '비밀번호 재설정 메일을 발송했습니다.',
-          );
-        }}
-      />
+      {basePath === '/custom' ? (
+        <RequestPasswordResetFormCustom {...commonProps} components={customRequestPasswordResetComponents} />
+      ) : (
+        <RequestPasswordResetForm
+          {...commonProps}
+          layout="card"
+          cardClassName={basePath === '/style' ? 'auth-card sample-styled-card' : undefined}
+          containerClassName={basePath === '/style' ? 'auth-container sample-styled-container' : undefined}
+        />
+      )}
     </section>
   );
 }

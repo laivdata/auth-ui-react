@@ -41,8 +41,29 @@ export { useLoginForm } from './hooks';
 export type { UseLoginFormConfig, UseLoginFormReturn, OAuth2ProviderName } from './hooks';
 export { LoginFormCustom } from './LoginFormCustom';
 export type { LoginFormCustomProps } from './LoginFormCustom';
+export { RegisterFormCustom } from './RegisterFormCustom';
+export type { RegisterFormCustomProps } from './RegisterFormCustom';
+export { WorkspaceJoinFormCustom } from './WorkspaceJoinFormCustom';
+export type { WorkspaceJoinFormCustomProps } from './WorkspaceJoinFormCustom';
+export { VerifyEmailFormCustom } from './VerifyEmailFormCustom';
+export type { VerifyEmailFormCustomProps } from './VerifyEmailFormCustom';
+export { ResendVerificationFormCustom } from './ResendVerificationFormCustom';
+export type { ResendVerificationFormCustomProps } from './ResendVerificationFormCustom';
+export { RequestPasswordResetFormCustom } from './RequestPasswordResetFormCustom';
+export type { RequestPasswordResetFormCustomProps } from './RequestPasswordResetFormCustom';
+export { ResetPasswordFormCustom } from './ResetPasswordFormCustom';
+export type { ResetPasswordFormCustomProps } from './ResetPasswordFormCustom';
+export { CallbackPageCustom } from './CallbackPageCustom';
+export type { CallbackPageCustomProps } from './CallbackPageCustom';
 export type {
   LoginFormCustomComponents,
+  RegisterFormCustomComponents,
+  WorkspaceJoinFormCustomComponents,
+  VerifyEmailFormCustomComponents,
+  ResendVerificationFormCustomComponents,
+  RequestPasswordResetFormCustomComponents,
+  ResetPasswordFormCustomComponents,
+  CallbackPageCustomComponents,
   AuthContainerProps,
   AuthCardProps,
   AuthInputProps,

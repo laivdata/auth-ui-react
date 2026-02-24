@@ -88,6 +88,18 @@
   margin-right: auto;
 }
 
+/* 스타일 커스텀 탭: className만으로 테마 변경 예시 */
+.sample-styled-container {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+.sample-styled-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+}
+
 .sample-section form {
   display: flex;
   flex-direction: column;
