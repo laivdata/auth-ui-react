@@ -324,8 +324,9 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@laivdata/auth-ui-react@file:..":
+"@laivdata/auth-ui-react@github:laivdata/auth-ui-react":
   version "0.2.0"
+  resolved "https://codeload.github.com/laivdata/auth-ui-react/tar.gz/f8f0e50b127c6647148d0b3f64275ee4abb5a80d"
 
 "@remix-run/router@1.23.2":
   version "1.23.2"
