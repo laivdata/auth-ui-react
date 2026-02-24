@@ -1,6 +1,6 @@
 {
   "name": "@laivdata/auth-ui-react",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "React UI and client utilities for login, register, workspace join, email verification",
   "private": false,
   "repository": { "type": "git", "url": "https://github.com/laivdata/auth-ui-react.git" },

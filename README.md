@@ -188,7 +188,7 @@ const MyButton: React.FC<AuthButtonProps> = (props) => <YourButton {...props} />
 ## 예제
 
 - **동작 데모**: [https://auth-ui-sample.laivdata.com/](https://auth-ui-sample.laivdata.com/) — 배포된 예제 앱 (동작만 확인할 때 사용).
-- **예제 소스**: 이 패키지의 예제 앱은 **npm에 포함되지 않고**, 이 저장소의 `packages/auth-ui-react/example` 에만 있습니다.  
+- **예제 소스**: 예제 앱은 **npm에 포함되지 않고** 이 저장소의 `example/` 에만 있습니다.  
   로컬에서 실행·수정해 보려면 **저장소를 clone** 한 뒤 아래처럼 실행하면 됩니다.
 
 ```bash
@@ -197,11 +197,12 @@ yarn sample:dev
 yarn sample:dev:https   # HTTPS (sample-local.laivdata.com:5173)
 
 # 또는 예제 디렉터리에서
-cd packages/auth-ui-react/example
+cd example
 yarn && yarn dev
 ```
 
-- 라우트: `/`, `/login`, `/register`, `/verify-email`, `/resend-verification`, `/auth/callback`, `/workspace-join`, `/reset-password-request`, `/reset-password`
+- **예제 구성**: 루트(`/`)에서 **기본** / **스타일 커스텀** / **컴포넌트 주입** 중 하나를 선택해 들어가면, 동일 폼을 각각 기본 스타일·`className`/`cardClassName`만으로 테마 변경·`components` 주입으로 UI 교체한 화면을 비교할 수 있습니다.
+- **라우트**: `/`, `/login`, `/register`, `/verify-email`, `/resend-verification`, `/auth/callback`, `/workspace-join`, `/reset-password-request`, `/reset-password`
 - 비로그인: 로그인·회원가입·인증 메일 재전송만 노출. 로그인 시: 비밀번호 재설정 요청·비밀번호 변경 노출. 워크스페이스 가입은 콜백에서만 진입.
 
 ---
@@ -219,7 +220,6 @@ yarn && yarn dev
 3. 배포:
 
 ```bash
-cd packages/auth-ui-react
 yarn build
 npm publish --access public
 ```
@@ -229,9 +229,9 @@ npm publish --access public
 
 ### 모노레포 / 로컬
 
-- 같은 저장소: `yarn workspaces` 또는 `"@laivdata/auth-ui-react": "file:../packages/auth-ui-react"` 로 참조.
-- 다른 프로젝트: 루트에서 `yarn pack:auth-ui-react` 실행 시 `packages/auth-ui-react/laivdata-auth-ui-react-0.1.0.tgz` 생성.  
-  `yarn add ./path/to/laivdata-auth-ui-react-0.1.0.tgz` 또는 git 의존성으로 설치.
+- 같은 저장소: `yarn workspaces` 또는 `"@laivdata/auth-ui-react": "file:.."`(예: example에서 상위 패키지 참조) 로 참조.
+- 다른 프로젝트: 루트에서 `yarn pack:auth-ui-react` 실행 시 `laivdata-auth-ui-react-<version>.tgz` 가 루트에 생성됩니다.  
+  `yarn add ./path/to/laivdata-auth-ui-react-<version>.tgz` 또는 git 의존성으로 설치합니다.
 
 ### GitHub Packages (선택)
 
