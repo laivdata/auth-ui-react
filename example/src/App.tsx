@@ -173,6 +173,7 @@ function Layout({ basePath }: { basePath: string }) {
             인증 서버: {config.authServerBaseUrl}
           </p>
           <nav className="sample-nav" aria-label="메인">
+            <NavItem to="/" label="처음으로" current={path === '/'} disabled={false} />
             <NavItem to={basePath} label="홈" current={path === basePath} disabled={false} />
             {!authenticated && (
               <>
