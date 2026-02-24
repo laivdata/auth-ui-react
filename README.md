@@ -112,12 +112,19 @@ const config: AuthClientConfig = {
 | **LoginForm** | 로컬(이메일/비밀번호) + OAuth2. 인증 서버 FE와 동일한 카드·헤더·폼·푸터·소셜 버튼 구조. `workspaceName`(헤더), `registerHref`, `resetPasswordHref`(푸터 링크), `layout`(`'fullpage'` 또는 `'card'`) 옵션. OAuth2 제공자는 `GET /api/auth/oauth2/providers` 자동 조회. |
 | **LoginFormCustom** | 로그인 폼 주입용 래퍼. `useLoginForm` 로직 + `components`(Container, Card, Input, Label, Button, Alert, Link, OAuthButton)로 UI만 주입. 미주입 시 기본 div/input/button 사용. |
 | **RegisterForm** | 이메일·비밀번호·표시명 회원가입. |
+| **RegisterFormCustom** | 회원가입 폼 주입용. `components`로 Container, Card, Input, Label, Button, Alert, Link 등 UI만 교체. |
 | **VerifyEmailForm** | 이메일 인증 (쿼리 `email`, `code` 또는 직접 입력). |
+| **VerifyEmailFormCustom** | 이메일 인증 폼 주입용. `components`로 UI만 교체. |
 | **ResendVerificationForm** | 인증 메일 재전송. |
+| **ResendVerificationFormCustom** | 인증 메일 재전송 폼 주입용. `components`로 UI만 교체. |
 | **CallbackPage** | OAuth2 서비스 콜백. **code 필수** → 토큰 교환 → `workspace_id` 있으면 **workspace select** 시도 → 성공 시 홈, 실패 시 **workspace join** 경로로 이동. |
+| **CallbackPageCustom** | 콜백 페이지 주입용. 토큰 교환·워크스페이스 선택 로직 + `components`로 화면만 교체. |
 | **WorkspaceJoinForm** | 워크스페이스 가입 (workspaceId, secret 등). |
+| **WorkspaceJoinFormCustom** | 워크스페이스 가입 폼 주입용. `components`로 UI만 교체. |
 | **RequestPasswordResetForm** | 비밀번호 재설정 요청 (이메일 발송). |
+| **RequestPasswordResetFormCustom** | 비밀번호 재설정 요청 폼 주입용. `components`로 UI만 교체. |
 | **ResetPasswordForm** | 비밀번호 변경 (쿼리 `email`, `code` 또는 입력). |
+| **ResetPasswordFormCustom** | 비밀번호 변경 폼 주입용. `components`로 UI만 교체. |
 
 ---
 
@@ -135,6 +142,7 @@ const config: AuthClientConfig = {
 - **훅**: `useLoginForm({ config, workspaceId?, redirectUri?, providers?, onSuccess? })` → `{ email, setEmail, password, setPassword, loading, error, setError, handleSubmit, oauthProviders }`.  
   이 값으로 자체 폼을 완전히 그리거나, 아래 래퍼에 컴포넌트만 넘길 수 있습니다.
 - **래퍼**: `LoginFormCustom`에 `components?: LoginFormCustomComponents`를 넘기면, 해당 슬롯만 주입된 컴포넌트로 렌더합니다.  
+  동일한 방식으로 **RegisterFormCustom**, **WorkspaceJoinFormCustom**, **VerifyEmailFormCustom**, **ResendVerificationFormCustom**, **RequestPasswordResetFormCustom**, **ResetPasswordFormCustom**, **CallbackPageCustom**이 제공되며, 각각 대응하는 `*CustomComponents` 타입으로 슬롯 규격을 정의합니다.  
   **각 슬롯의 규격(필수 prop·용도)은 [주입용 디자인 컴포넌트 규격](docs/custom-components.md)을 참고하세요.**
 
 ```tsx
