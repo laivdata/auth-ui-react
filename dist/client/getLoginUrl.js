@@ -52,7 +52,7 @@ function getAuthServerLoginUrl(config, options) {
     if (options?.workspaceId)
         params.set('client_id', options.workspaceId);
     if (options?.redirectUri)
-        params.set('final_redirect_uri', options.redirectUri);
+        params.set('redirect_uri', options.redirectUri);
     if (options?.responseType)
         params.set('response_type', options.responseType);
     if (options?.state)
