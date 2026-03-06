@@ -67,7 +67,7 @@ export function getAuthServerLoginUrl(
   const base = config.authServerBaseUrl.replace(/\/$/, '');
   const params = new URLSearchParams();
   if (options?.workspaceId) params.set('client_id', options.workspaceId);
-  if (options?.redirectUri) params.set('final_redirect_uri', options.redirectUri);
+  if (options?.redirectUri) params.set('redirect_uri', options.redirectUri);
   if (options?.responseType) params.set('response_type', options.responseType);
   if (options?.state) params.set('state', options.state);
   const qs = params.toString();
