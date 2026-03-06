@@ -34,6 +34,6 @@ export declare function getAuthServerLoginUrl(config: AuthClientConfig, options?
 export declare function getAvailableOAuth2Providers(config: AuthClientConfig): Promise<OAuth2ProviderInfo[]>;
 /**
  * OAuth2 제공자로 리다이렉트하는 URL (GET 리다이렉트 엔드포인트).
- * 인증 서버가 GET /api/auth/oauth2/provider/:provider?final_redirect_uri=...&workspace_id=...&email=... 로 리다이렉트해 주는 URL.
+ * 인증 서버가 GET /api/auth/oauth2/provider/:provider?redirect_uri=...&workspace_id=...&email=... 로 리다이렉트해 주는 URL.
  */
 export declare function getOAuth2ProviderRedirectUrl(config: AuthClientConfig, options: GetOAuth2LoginUrlOptions): string;

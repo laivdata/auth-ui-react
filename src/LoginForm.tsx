@@ -64,7 +64,7 @@ function OAuthIcon({ provider }: { provider: string }) {
   return null;
 }
 
-/** loginUrl에 final_redirect_uri, workspace_id 쿼리 추가 (API 조회 시 반환된 URL용) */
+/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 (API 조회 시 반환된 URL용) */
 function buildOAuth2Link(
   info: OAuth2ProviderInfo,
   redirectUri?: string,
@@ -72,7 +72,7 @@ function buildOAuth2Link(
 ): string {
   if (!redirectUri && !workspaceId) return info.loginUrl;
   const params = new URLSearchParams();
-  if (redirectUri) params.set('final_redirect_uri', redirectUri);
+  if (redirectUri) params.set('redirect_uri', redirectUri);
   if (workspaceId) params.set('workspace_id', workspaceId);
   const sep = info.loginUrl.includes('?') ? '&' : '?';
   return `${info.loginUrl}${sep}${params.toString()}`;

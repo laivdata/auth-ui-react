@@ -111,7 +111,7 @@ export async function getAvailableOAuth2Providers(
 
 /**
  * OAuth2 제공자로 리다이렉트하는 URL (GET 리다이렉트 엔드포인트).
- * 인증 서버가 GET /api/auth/oauth2/provider/:provider?final_redirect_uri=...&workspace_id=...&email=... 로 리다이렉트해 주는 URL.
+ * 인증 서버가 GET /api/auth/oauth2/provider/:provider?redirect_uri=...&workspace_id=...&email=... 로 리다이렉트해 주는 URL.
  */
 export function getOAuth2ProviderRedirectUrl(
   config: AuthClientConfig,
@@ -119,7 +119,7 @@ export function getOAuth2ProviderRedirectUrl(
 ): string {
   const base = config.authServerBaseUrl.replace(/\/$/, '');
   const params = new URLSearchParams();
-  if (options.redirectUri) params.set('final_redirect_uri', options.redirectUri);
+  if (options.redirectUri) params.set('redirect_uri', options.redirectUri);
   if (options.workspaceId) params.set('workspace_id', options.workspaceId);
   if (options.email) params.set('email', options.email);
   const qs = params.toString();

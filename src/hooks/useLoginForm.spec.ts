@@ -62,7 +62,7 @@ describe('useLoginForm', () => {
       'api/auth/oauth2/provider/google',
     );
     expect(result.current.oauthProviders[0].loginUrl).toContain(
-      'final_redirect_uri=',
+      'redirect_uri=',
     );
     expect(result.current.oauthProviders[0].loginUrl).toContain(
       'workspace_id=ws1',

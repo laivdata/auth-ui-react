@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoginFormCustom = LoginFormCustom;
 const jsx_runtime_1 = require("react/jsx-runtime");
 const hooks_1 = require("./hooks");
-/** loginUrl에 final_redirect_uri, workspace_id 쿼리 추가 (API 조회 결과 URL용) */
+/** loginUrl에 redirect_uri, workspace_id 쿼리 추가 (API 조회 결과 URL용) */
 function buildOAuth2Link(info, redirectUri, workspaceId) {
     if (!redirectUri && !workspaceId)
         return info.loginUrl;
     const params = new URLSearchParams();
     if (redirectUri)
-        params.set('final_redirect_uri', redirectUri);
+        params.set('redirect_uri', redirectUri);
     if (workspaceId)
         params.set('workspace_id', workspaceId);
     const sep = info.loginUrl.includes('?') ? '&' : '?';
