@@ -334,7 +334,7 @@ function Login() {
           인증서버 로그인
         </a>
         <p className="small text-muted mt-1 mb-0">
-          인증 서버 /fe/login 으로 이동 (client_id, redirect_uri,
+          인증 서버 /fe/login 으로 이동 (client_id, final_redirect_uri,
           response_type=code 전달)
         </p>
       </div>

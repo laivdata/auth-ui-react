@@ -1,4 +1,5 @@
 node_modules
+package-lock.json
 
 # SSL 인증서 (로컬 개발용, agent-auth/ssl에서 복사)
 ssl/*.pem

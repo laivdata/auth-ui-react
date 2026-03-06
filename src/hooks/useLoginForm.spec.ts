@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useLoginForm } from './useLoginForm';
 
@@ -7,7 +7,6 @@ const config = { authServerBaseUrl: 'https://auth.example.com' };
 
 describe('useLoginForm', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
     vi.stubGlobal(
       'fetch',
       vi.fn((url: string) => {
@@ -63,7 +62,7 @@ describe('useLoginForm', () => {
       'api/auth/oauth2/provider/google',
     );
     expect(result.current.oauthProviders[0].loginUrl).toContain(
-      'redirect_uri=',
+      'final_redirect_uri=',
     );
     expect(result.current.oauthProviders[0].loginUrl).toContain(
       'workspace_id=ws1',
